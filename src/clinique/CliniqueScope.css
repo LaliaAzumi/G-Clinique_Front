@@ -1,0 +1,20 @@
+.clinique-scope {
+  --blue-primary: #3b5bdb;
+  --blue-dark: #2f4ac7;
+  --blue-sidebar: #2d4eb8;
+  --green-active: #28a745;
+  --gray-inactive: #9ca3af;
+  --red-delete: #ef4444;
+  --white: #ffffff;
+  --border: #e5e7eb;
+  --text-muted: #6b7280;
+  --row-hover: #f9fafb;
+
+  background: #f0f2f5;
+  color: #1a1a2e;
+  min-height: 100vh;
+}
+
+.clinique-scope * {
+  box-sizing: border-box;
+}
