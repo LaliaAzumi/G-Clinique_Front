@@ -1,0 +1,52 @@
+.clinique-scope .pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0 4px;
+  position: relative;
+}
+
+.clinique-scope .pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.clinique-scope .page-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: var(--white);
+  border-radius: 6px;
+  cursor: pointer;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.clinique-scope .page-btn:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.clinique-scope .page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.clinique-scope .page-btn.active {
+  background: var(--blue-primary);
+  border-color: var(--blue-primary);
+  color: white;
+}
+
+.clinique-scope .pagination-info {
+  position: absolute;
+  right: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}

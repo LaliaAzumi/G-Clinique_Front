@@ -1,0 +1,117 @@
+export const secretaires = [
+  {
+    id: 1,
+    username: "anna.rakoto",
+    email: "anna.rakoto@exemple.com",
+    telephone: "+33 6 12 34 56 78",
+  },
+  {
+    id: 2,
+    username: "sophie.rabe",
+    email: "sophie.rabe@exemple.com",
+    telephone: "+33 6 11 22 33 44",
+  },
+  {
+    id: 3,
+    username: "jean.kely",
+    email: "jean.kely@exemple.com",
+    telephone: "+33 6 55 44 33 22",
+  },
+  {
+    id: 4,
+    username: "celine.ranaivo",
+    email: "celine.ranaivo@exemple.com",
+    telephone: "+33 6 66 77 88 99",
+  },
+] as const;
+
+export const medecins = [
+  {
+    id: 1024,
+    nom: "Paul Rakoto",
+    specialite: "Cardiologue",
+    telephone: "+33 6 12 34 56 78",
+    email: "paul.rakoto@exem...",
+  },
+  {
+    id: 1025,
+    nom: "Marie Rasolo",
+    specialite: "Généraliste",
+    telephone: "+33 6 22 33 44 55",
+    email: "marie.rasolo@exem...",
+  },
+  {
+    id: 1026,
+    nom: "Sophie Rabei",
+    specialite: "Pédiatre",
+    telephone: "+33 6 55 44 33 22",
+    email: "sophie.rabei@exem...",
+  },
+  {
+    id: 1027,
+    nom: "Jean Koto",
+    specialite: "Dermatologue",
+    telephone: "+33 6 77 44 55 66",
+    email: "jean.koto@exemple",
+  },
+  {
+    id: 1028,
+    nom: "Claire Mahery",
+    specialite: "Gynécologue",
+    telephone: "+33 6 66 77 88 99",
+    email: "claire.mahery@exem...",
+  },
+] as const;
+
+export const patients = [
+  {
+    id: 1024,
+    nomComplet: "Rabe Samy",
+    nom: "Rabe",
+    prenom: "Samy",
+    sexe: "Homme",
+    age: 35,
+    telephone: "+33 6 12 34 56 78",
+    derniereConsultation: "10/04/2024",
+  },
+  {
+    id: 1025,
+    nomComplet: "Rakoto Harisoa",
+    nom: "Rakoto",
+    prenom: "Harisoa",
+    sexe: "Femme",
+    age: 42,
+    telephone: "+33 6 22 33 44 55",
+    derniereConsultation: "09/04/2024",
+  },
+  {
+    id: 1026,
+    nomComplet: "Rasolo Jean",
+    nom: "Rasolo",
+    prenom: "Jean",
+    sexe: "Homme",
+    age: 51,
+    telephone: "+33 6 44 55 33 77",
+    derniereConsultation: "06/04/2024",
+  },
+  {
+    id: 1027,
+    nomComplet: "Ranaivo Anna",
+    nom: "Ranaivo",
+    prenom: "Anna",
+    sexe: "Femme",
+    age: 29,
+    telephone: "+33 6 11 66 55 44",
+    derniereConsultation: "01/04/2024",
+  },
+  {
+    id: 1028,
+    nomComplet: "Koto Sylvain",
+    nom: "Koto",
+    prenom: "Sylvain",
+    sexe: "Homme",
+    age: 67,
+    telephone: "+33 6 77 88 44 11",
+    derniereConsultation: "20/03/2024",
+  },
+] as const;
