@@ -1,18 +1,41 @@
+// lib/api-patients.ts
 import { Patient } from "../types/patient";
 
-// Simulacre de données pour ton rendu actuel (Mock Data)
-const MOCK_PATIENTS: Patient[] = [
-  { id: "1", firstName: "Jean", lastName: "Dupont", email: "jean@mail.com", phone: "03400000", dateOfBirth: "1985-05-12", gender: "M", lastVisit: "2026-03-25" },
-];
+const API_BASE_URL = "http://localhost:8000/api/v1/patients";
 
 export const patientService = {
-  // Cette fonction sera reliée à Spring Boot plus tard
-  getAll: async (): Promise<Patient[]> => {
-    // Pour l'instant, on retourne les données de test
-    return new Promise((resolve) => setTimeout(() => resolve(MOCK_PATIENTS), 500));
+  // Récupérer le token depuis le localStorage (ou votre store d'état)
+  getAuthHeader: () => {
+    const token = localStorage.getItem("token"); 
+    return { "Authorization": `Bearer ${token}` };
   },
-  
-  create: async (patient: Omit<Patient, "id">) => {
-    console.log("Envoi au Backend Spring Boot:", patient);
+
+  getAll: async (page = 0, size = 10): Promise<Patient[]> => {
+    const response = await fetch(`${API_BASE_URL}?page=${page}&size=${size}`, {
+      headers: patientService.getAuthHeader()
+    });
+    if (!response.ok) throw new Error("Erreur lors de la récupération");
+    return response.json();
+  },
+
+  create: async (patient: Omit<Patient, "id">): Promise<Patient> => {
+    const response = await fetch(`${API_BASE_URL}/save`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...patientService.getAuthHeader()
+      },
+      body: JSON.stringify(patient),
+    });
+    if (!response.ok) throw new Error("Erreur lors de la création");
+    return response.json();
+  },
+
+  delete: async (id: string): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+      method: "DELETE",
+      headers: patientService.getAuthHeader()
+    });
+    if (!response.ok) throw new Error("Erreur lors de la suppression");
   }
 };

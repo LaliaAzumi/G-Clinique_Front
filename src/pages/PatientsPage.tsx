@@ -36,7 +36,17 @@ const PatientsPage = () => {
       toast.error("Erreur lors de l'ajout");
     }
   };
-
+const handleDelete = async (id: string) => {
+  if (window.confirm("Supprimer ce patient ?")) {
+    try {
+      await patientService.delete(id);
+      setPatients(patients.filter(p => p.id !== id));
+      toast.success("Patient supprimé");
+    } catch (error) {
+      toast.error("Erreur de suppression");
+    }
+  }
+};
   return (
     <div className="min-h-screen p-8 text-primary-foreground" 
          style={{ backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
@@ -104,7 +114,12 @@ const PatientsPage = () => {
                   <td className="p-4 text-sm">{patient.lastVisit}</td>
                   <td className="p-4 flex justify-center gap-3">
                     <button className="p-2 hover:bg-white/10 rounded-lg text-primary"><Edit size={16}/></button>
-                    <button className="p-2 hover:bg-white/10 rounded-lg text-red-400"><Trash2 size={16}/></button>
+                    <button 
+                      onClick={() => handleDelete(patient.id)} 
+                      className="p-2 hover:bg-white/10 rounded-lg text-red-400"
+                    >
+                      <Trash2 size={16}/>
+                    </button>
                   </td>
                 </tr>
               ))}
