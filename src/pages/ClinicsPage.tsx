@@ -1,35 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus, MapPin, Phone, Mail } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import PageLayout from "@/components/PageLayout";
 import SearchBar from "@/components/SearchBar";
-import TableActions from "@/components/TableActions";
 import AddClinicForm from "@/components/AddClinicForm";
-import { clinicService } from "@/lib/api-clinics";
 import { Clinic } from "@/types/clinic";
+import { staticClinics } from "@/lib/staticData";
 
 const ClinicsPage = () => {
-  const [clinics, setClinics] = useState<Clinic[]>([]);
+  const [clinics, setClinics] = useState<Clinic[]>(staticClinics);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    loadClinics();
-  }, []);
-
-  const loadClinics = async () => {
-    setIsLoading(true);
-    try {
-      const data = await clinicService.getAll();
-      setClinics(data);
-    } catch (error) {
-      toast.error("Erreur lors du chargement des cliniques");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const filteredClinics = clinics.filter(
     (c) =>
@@ -37,26 +19,21 @@ const ClinicsPage = () => {
       c.city.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleAddClinic = async (data: any) => {
-    try {
-      await clinicService.create(data);
-      toast.success("Clinique ajoutée avec succès !");
-      setIsModalOpen(false);
-      loadClinics();
-    } catch (error) {
-      toast.error("Erreur lors de l'ajout");
-    }
+  const handleAddClinic = (data: any) => {
+    const newClinic: Clinic = {
+      id: String(clinics.length + 1),
+      ...data,
+      servicesCount: 0,
+    };
+    setClinics([...clinics, newClinic]);
+    toast.success("Clinique ajoutée avec succès !");
+    setIsModalOpen(false);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette clinique ?")) return;
-    try {
-      await clinicService.delete(id);
-      toast.success("Clinique supprimée avec succès !");
-      loadClinics();
-    } catch (error) {
-      toast.error("Erreur lors de la suppression");
-    }
+    setClinics(clinics.filter((c) => c.id !== id));
+    toast.success("Clinique supprimée avec succès !");
   };
 
   return (
@@ -92,11 +69,7 @@ const ClinicsPage = () => {
       />
 
       {/* Clinics Grid or Table */}
-      {isLoading ? (
-        <div className="glass-card p-10 text-center text-white/40">
-          Chargement...
-        </div>
-      ) : filteredClinics.length === 0 ? (
+      {filteredClinics.length === 0 ? (
         <div className="glass-card p-10 text-center text-white/40">
           Aucune clinique trouvée.
         </div>

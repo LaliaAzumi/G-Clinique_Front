@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -21,55 +20,32 @@ import {
 } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import StatsCard from "@/components/StatsCard";
-import { patientService } from "@/lib/api-patients";
-import { clinicService } from "@/lib/api-clinics";
-import { serviceService } from "@/lib/api-services";
-import { appointmentService } from "@/lib/api-appointments";
 
 const DashboardPage = () => {
-  const [stats, setStats] = useState({
-    patients: 0,
-    clinics: 0,
-    services: 0,
-    appointments: 0,
-  });
+  // Données statiques
+  const stats = {
+    patients: 245,
+    clinics: 8,
+    services: 32,
+    appointments: 156,
+  };
 
-  const [chartData] = useState([
+  const chartData = [
     { month: "Jan", patients: 45, appointments: 28 },
     { month: "Fév", patients: 52, appointments: 35 },
     { month: "Mar", patients: 68, appointments: 42 },
     { month: "Avr", patients: 75, appointments: 51 },
     { month: "Mai", patients: 82, appointments: 58 },
     { month: "Juin", patients: 88, appointments: 65 },
-  ]);
+  ];
 
-  const [servicesData] = useState([
+  const servicesData = [
     { name: "Consultation", value: 35 },
     { name: "Dentologie", value: 28 },
     { name: "Chirurgie", value: 18 },
     { name: "Radiologie", value: 12 },
     { name: "Autres", value: 7 },
-  ]);
-
-  useEffect(() => {
-    const loadStats = async () => {
-      const [patients, clinics, services, appointments] = await Promise.all([
-        patientService.getAll(),
-        clinicService.getAll(),
-        serviceService.getAll(),
-        appointmentService.getAll(),
-      ]);
-
-      setStats({
-        patients: patients.length,
-        clinics: clinics.length,
-        services: services.length,
-        appointments: appointments.length,
-      });
-    };
-
-    loadStats();
-  }, []);
+  ];
 
   return (
     <PageLayout title="Tableau de Bord" subtitle="Vue d'ensemble des statistiques">

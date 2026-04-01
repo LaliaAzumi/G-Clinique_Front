@@ -128,7 +128,7 @@
   /* Textarea */
   .login-input[type="textarea"],
   textarea.login-input {
-    @apply resize-vertical;
+    resize: vertical;
   }
 
   /* Primary Button */

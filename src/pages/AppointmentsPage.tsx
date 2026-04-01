@@ -1,47 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus, Trash2, Check, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import PageLayout from "@/components/PageLayout";
 import SearchBar from "@/components/SearchBar";
 import StatusBadge from "@/components/StatusBadge";
-import { appointmentService } from "@/lib/api-appointments";
-import { patientService } from "@/lib/api-patients";
-import { serviceService } from "@/lib/api-services";
-import { clinicService } from "@/lib/api-clinics";
 import { Appointment } from "@/types/appointment";
+import { staticAppointments } from "@/lib/staticData";
 
 const AppointmentsPage = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>(staticAppointments);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     patientId: "",
-    serviceId: "",
-    clinicId: "",
+    serviceName: "",
+    clinicName: "",
     appointmentDate: "",
     appointmentTime: "",
     notes: "",
   });
-
-  useEffect(() => {
-    loadAppointments();
-  }, []);
-
-  const loadAppointments = async () => {
-    setIsLoading(true);
-    try {
-      const data = await appointmentService.getAll();
-      setAppointments(data.sort((a, b) => 
-        new Date(b.appointmentDate).getTime() - new Date(a.appointmentDate).getTime()
-      ));
-    } catch (error) {
-      toast.error("Erreur lors du chargement");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const filteredAppointments = appointments.filter(
     (a) =>
@@ -49,50 +27,51 @@ const AppointmentsPage = () => {
       a.serviceName.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleAddAppointment = async (e: any) => {
+  const handleAddAppointment = (e: any) => {
     e.preventDefault();
-    if (!formData.patientId || !formData.serviceId || !formData.clinicId || 
+    if (!formData.patientId || !formData.serviceName || !formData.clinicName || 
         !formData.appointmentDate || !formData.appointmentTime) {
       toast.error("Veuillez remplir tous les champs requis");
       return;
     }
-    try {
-      await appointmentService.create(formData);
-      toast.success("Rendez-vous créé avec succès !");
-      setIsModalOpen(false);
-      setFormData({
-        patientId: "",
-        serviceId: "",
-        clinicId: "",
-        appointmentDate: "",
-        appointmentTime: "",
-        notes: "",
-      });
-      loadAppointments();
-    } catch (error) {
-      toast.error("Erreur lors de la création");
-    }
+
+    const newAppointment: Appointment = {
+      id: String(appointments.length + 1),
+      patientName: formData.patientId,
+      serviceName: formData.serviceName,
+      clinicName: formData.clinicName,
+      appointmentDate: formData.appointmentDate,
+      appointmentTime: formData.appointmentTime,
+      status: "pending",
+      notes: formData.notes,
+    };
+
+    setAppointments([newAppointment, ...appointments]);
+    toast.success("Rendez-vous créé avec succès !");
+    setIsModalOpen(false);
+    setFormData({
+      patientId: "",
+      serviceName: "",
+      clinicName: "",
+      appointmentDate: "",
+      appointmentTime: "",
+      notes: "",
+    });
   };
 
-  const handleUpdateStatus = async (id: string, status: any) => {
-    try {
-      await appointmentService.update({ id, status });
-      toast.success("Statut mis à jour !");
-      loadAppointments();
-    } catch (error) {
-      toast.error("Erreur lors de la mise à jour");
-    }
+  const handleUpdateStatus = (id: string, status: string) => {
+    setAppointments(
+      appointments.map((apt) =>
+        apt.id === id ? { ...apt, status: status as any } : apt
+      )
+    );
+    toast.success("Statut mis à jour !");
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm("Êtes-vous sûr ?")) return;
-    try {
-      await appointmentService.delete(id);
-      toast.success("Rendez-vous supprimé !");
-      loadAppointments();
-    } catch (error) {
-      toast.error("Erreur lors de la suppression");
-    }
+  const handleDelete = (id: string) => {
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer ce rendez-vous ?")) return;
+    setAppointments(appointments.filter((a) => a.id !== id));
+    toast.success("Rendez-vous supprimé !");
   };
 
   const formatDate = (dateString: string) => {
@@ -123,11 +102,11 @@ const AppointmentsPage = () => {
             </DialogHeader>
             <form onSubmit={handleAddAppointment} className="space-y-4">
               <div>
-                <label className="text-xs text-primary-foreground/60 ml-1">Patient</label>
+                <label className="text-xs text-primary-foreground/60 ml-1">Nom du Patient</label>
                 <input
                   type="text"
                   className="login-input"
-                  placeholder="ID ou nom du patient"
+                  placeholder="Nom complet du patient"
                   value={formData.patientId}
                   onChange={(e) => setFormData({ ...formData, patientId: e.target.value })}
                 />
@@ -137,9 +116,9 @@ const AppointmentsPage = () => {
                 <input
                   type="text"
                   className="login-input"
-                  placeholder="ID du service"
-                  value={formData.serviceId}
-                  onChange={(e) => setFormData({ ...formData, serviceId: e.target.value })}
+                  placeholder="Consultation, Dentologie..."
+                  value={formData.serviceName}
+                  onChange={(e) => setFormData({ ...formData, serviceName: e.target.value })}
                 />
               </div>
               <div>
@@ -147,9 +126,9 @@ const AppointmentsPage = () => {
                 <input
                   type="text"
                   className="login-input"
-                  placeholder="ID de la clinique"
-                  value={formData.clinicId}
-                  onChange={(e) => setFormData({ ...formData, clinicId: e.target.value })}
+                  placeholder="Nom de la clinique"
+                  value={formData.clinicName}
+                  onChange={(e) => setFormData({ ...formData, clinicName: e.target.value })}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -205,9 +184,7 @@ const AppointmentsPage = () => {
         placeholder="Rechercher un rendez-vous..."
       />
 
-      {isLoading ? (
-        <div className="glass-card p-10 text-center text-white/40">Chargement...</div>
-      ) : filteredAppointments.length === 0 ? (
+      {filteredAppointments.length === 0 ? (
         <div className="glass-card p-10 text-center text-white/40">
           Aucun rendez-vous trouvé.
         </div>

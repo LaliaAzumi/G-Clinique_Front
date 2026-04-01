@@ -1,21 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus, Trash2, Edit } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import PageLayout from "@/components/PageLayout";
 import SearchBar from "@/components/SearchBar";
 import StatusBadge from "@/components/StatusBadge";
-import { serviceService } from "@/lib/api-services";
-import { clinicService } from "@/lib/api-clinics";
 import { Service } from "@/types/service";
 import { Clinic } from "@/types/clinic";
+import { staticServices, staticClinics } from "@/lib/staticData";
 
 const ServicesPage = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [clinics, setClinics] = useState<Clinic[]>([]);
+  const [services, setServices] = useState<Service[]>(staticServices);
+  const [clinics] = useState<Clinic[]>(staticClinics);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -24,65 +22,41 @@ const ServicesPage = () => {
     duration: "",
   });
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    setIsLoading(true);
-    try {
-      const [servicesData, clinicsData] = await Promise.all([
-        serviceService.getAll(),
-        clinicService.getAll(),
-      ]);
-      setServices(servicesData);
-      setClinics(clinicsData);
-    } catch (error) {
-      toast.error("Erreur lors du chargement");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const filteredServices = services.filter(
     (s) =>
       s.name.toLowerCase().includes(search.toLowerCase()) ||
       s.clinicName.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleAddService = async (e: any) => {
+  const handleAddService = (e: any) => {
     e.preventDefault();
     if (!formData.name || !formData.clinicId || !formData.price || !formData.duration) {
       toast.error("Veuillez remplir tous les champs");
       return;
     }
-    try {
-      await serviceService.create({
-        name: formData.name,
-        description: formData.description,
-        clinicId: formData.clinicId,
-        price: Number(formData.price),
-        duration: Number(formData.duration),
-        isActive: true,
-      });
-      toast.success("Service ajouté avec succès !");
-      setIsModalOpen(false);
-      setFormData({ name: "", description: "", clinicId: "", price: "", duration: "" });
-      loadData();
-    } catch (error) {
-      toast.error("Erreur lors de l'ajout");
-    }
+
+    const selectedClinic = clinics.find((c) => c.id === formData.clinicId);
+    const newService: Service = {
+      id: String(services.length + 1),
+      name: formData.name,
+      description: formData.description,
+      clinicName: selectedClinic?.name || "",
+      clinicId: formData.clinicId,
+      price: Number(formData.price),
+      duration: Number(formData.duration),
+      isActive: true,
+    };
+
+    setServices([...services, newService]);
+    toast.success("Service ajouté avec succès !");
+    setIsModalOpen(false);
+    setFormData({ name: "", description: "", clinicId: "", price: "", duration: "" });
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm("Êtes-vous sûr ?")) return;
-    try {
-      await serviceService.delete(id);
-      toast.success("Service supprimé !");
-      loadData();
-    } catch (error) {
-      toast.error("Erreur lors de la suppression");
-    }
+  const handleDelete = (id: string) => {
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer ce service ?")) return;
+    setServices(services.filter((s) => s.id !== id));
+    toast.success("Service supprimé !");
   };
 
   return (
@@ -183,9 +157,7 @@ const ServicesPage = () => {
         placeholder="Rechercher un service..."
       />
 
-      {isLoading ? (
-        <div className="glass-card p-10 text-center text-white/40">Chargement...</div>
-      ) : filteredServices.length === 0 ? (
+      {filteredServices.length === 0 ? (
         <div className="glass-card p-10 text-center text-white/40">
           Aucun service trouvé.
         </div>
