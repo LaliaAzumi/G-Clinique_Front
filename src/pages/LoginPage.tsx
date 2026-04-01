@@ -1,15 +1,34 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, Stethoscope } from "lucide-react";
 import loginBg from "@/assets/login-bg.jpg";
+import { useAuth } from "@/context/AuthContext"; // notre context global
+import { loginRequest } from "@/services/api"; // service API centralisé
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth(); // accès au context pour stocker token + user
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login:", { email, password });
+    setLoading(true);
+    try {
+      // ⚡ Appel API backend
+      const data = await loginRequest(username, password);
+
+      // 🔐 Stockage global de l'utilisateur et du token
+      login(data);
+
+      // 🔄 Redirection vers dashboard
+      window.location.href = "/dashboard";
+    } catch (error: any) {
+      alert(error.message || "Erreur de connexion");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,7 +54,7 @@ const LoginPage = () => {
           Welcome Back!
         </h1>
         <p className="mb-8 text-center text-sm text-primary-foreground/70">
-          Email or No. téléphone
+          Name user
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -43,10 +62,10 @@ const LoginPage = () => {
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-primary-foreground/50" />
             <input
-              type="email"
-              placeholder="Email/Numéro"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Nom d'utilisateur"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="login-input pl-11"
             />
           </div>
