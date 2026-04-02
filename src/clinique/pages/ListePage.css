@@ -7,12 +7,18 @@
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 24px;
+  background: var(--glass-bg-2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 18px 20px;
 }
 
 .clinique-scope .page-title {
   font-size: 24px;
   font-weight: 700;
-  color: #111827;
+  color: rgba(255, 255, 255, 0.95);
   margin-bottom: 4px;
 }
 
@@ -25,11 +31,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--blue-primary);
+  background: var(--primary);
   color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -38,13 +44,16 @@
 }
 
 .clinique-scope .btn-primary:hover {
-  background: var(--blue-dark);
+  background: #00a884;
 }
 
 .clinique-scope .table-card {
-  background: var(--white);
-  border-radius: 12px;
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--glass-shadow);
   overflow: hidden;
   padding: 20px;
 }
@@ -60,9 +69,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #f9fafb;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
   padding: 8px 14px;
   flex: 1;
   max-width: 360px;
@@ -78,12 +89,12 @@
   background: transparent;
   outline: none;
   font-size: 14px;
-  color: #374151;
+  color: rgba(255, 255, 255, 0.9);
   width: 100%;
 }
 
 .clinique-scope .search-input input::placeholder {
-  color: var(--gray-inactive);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .clinique-scope .filter-group {
@@ -95,17 +106,17 @@
 
 .clinique-scope .filter-label {
   font-size: 14px;
-  color: #374151;
+  color: rgba(255, 255, 255, 0.8);
   white-space: nowrap;
 }
 
 .clinique-scope .filter-select {
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
   padding: 8px 32px 8px 12px;
   font-size: 14px;
-  color: #374151;
-  background: var(--white)
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
     no-repeat right 10px center;
   appearance: none;
@@ -114,7 +125,7 @@
 }
 
 .clinique-scope .filter-select:focus {
-  border-color: var(--blue-primary);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .clinique-scope .data-table {
@@ -126,22 +137,22 @@
 .clinique-scope .data-table th {
   text-align: left;
   padding: 10px 16px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
   font-size: 13px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   white-space: nowrap;
 }
 
 .clinique-scope .data-table td {
   padding: 14px 16px;
-  border-bottom: 1px solid #f3f4f6;
-  color: #374151;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   vertical-align: middle;
 }
 
 .clinique-scope .data-table tbody tr:hover {
-  background: var(--row-hover);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .clinique-scope .data-table tbody tr:last-child td {
@@ -226,7 +237,7 @@
 .clinique-scope .action-btn {
   width: 30px;
   height: 30px;
-  border-radius: 6px;
+  border-radius: 10px;
   border: none;
   display: flex;
   align-items: center;
@@ -237,27 +248,27 @@
 }
 
 .clinique-scope .action-btn.view {
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .clinique-scope .action-btn.view:hover {
-  background: #f3f4f6;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .clinique-scope .action-btn.edit {
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .clinique-scope .action-btn.edit:hover {
-  background: #f3f4f6;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .clinique-scope .action-btn.delete {
-  color: #ef4444;
+  color: rgba(255, 100, 100, 0.95);
 }
 
 .clinique-scope .action-btn.delete:hover {
-  background: #fef2f2;
+  background: rgba(255, 100, 100, 0.18);
 }
 
 .clinique-scope .sexe-cell {

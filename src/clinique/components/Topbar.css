@@ -1,11 +1,13 @@
 .clinique-scope .topbar {
   height: 64px;
-  background: var(--white);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 28px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -15,8 +17,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #f3f4f6;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
   padding: 8px 14px;
   width: 240px;
 }
@@ -31,12 +36,12 @@
   background: transparent;
   outline: none;
   font-size: 14px;
-  color: #374151;
+  color: rgba(255, 255, 255, 0.9);
   width: 100%;
 }
 
 .clinique-scope .topbar-search input::placeholder {
-  color: var(--gray-inactive);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .clinique-scope .topbar-right {
@@ -49,7 +54,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.8);
   display: flex;
   align-items: center;
   padding: 6px;
@@ -58,7 +63,7 @@
 }
 
 .clinique-scope .notif-btn:hover {
-  background: #f3f4f6;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .clinique-scope .user-info {
@@ -72,7 +77,7 @@
 }
 
 .clinique-scope .user-info:hover {
-  background: #f3f4f6;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .clinique-scope .user-avatar {
@@ -96,7 +101,7 @@
 .clinique-scope .user-name {
   font-size: 14px;
   font-weight: 600;
-  color: #111827;
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.2;
 }
 
