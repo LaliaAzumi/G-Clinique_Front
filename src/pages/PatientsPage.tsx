@@ -90,18 +90,25 @@ const PatientsPage = () => {
           <table className="w-full text-left border-collapse">
             <thead className="bg-white/10 text-sm uppercase">
               <tr>
-                <th className="p-4">Patient</th>
-                <th className="p-4">Contact</th>
-                <th className="p-4">Dernière Visite</th>
-                <th className="p-4 text-center">Actions</th>
+                <th className="p-4">NOM</th>
+                <th className="p-4">PRENOM</th>
+                <th className="p-4">DATE NAISSANCE</th>
+                <th className="p-4 ">TELEPHONE</th>
+                <th className="p-4 ">ADRESSE</th>
+                <th className="p-4 ">MAIL</th>
+                <th className="p-4 ">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
               {filteredPatients.map((patient) => (
                 <tr key={patient.id} className="hover:bg-white/5 transition-colors">
-                  <td className="p-4 font-medium">{patient.lastName} {patient.firstName}</td>
-                  <td className="p-4 text-sm text-white/70">{patient.email} <br/> {patient.phone}</td>
-                  <td className="p-4 text-sm">{patient.lastVisit}</td>
+                  <td className="p-4 font-medium">{patient.lastName} </td>
+                  <td className="p-4 text-sm text-white/70">{patient.firstName}  </td>
+                  <td className="p-4 text-sm">{patient.dateOfBirth}</td>
+                  <td className="p-4 text-sm">{patient.phone}</td>
+                  <td className="p-4 text-sm">{patient.adresse}</td>
+                  <td className="p-4 text-sm">{patient.email}</td>
+                  
                   <td className="p-4 flex justify-center gap-3">
                     <button className="p-2 hover:bg-white/10 rounded-lg text-primary"><Edit size={16}/></button>
                     <button className="p-2 hover:bg-white/10 rounded-lg text-red-400"><Trash2 size={16}/></button>

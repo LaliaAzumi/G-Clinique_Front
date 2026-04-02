@@ -93,21 +93,7 @@ const LoginPage = () => {
           <button type="submit" className="login-btn">
             SIGN IN
           </button>
-
-         
         </form>
-
-        {/* Sign up link */}
-        {/* Sign up link */}
-        <p className="mt-8 text-center text-sm text-primary-foreground/60 text-[#0a2f29]">
-          Don't have an account?{" "}
-          <Link 
-            to="/register" 
-            className="font-semibold text-primary-foreground hover:underline transition-all text-[#0a2f29]"
-          >
-            Sign Up
-          </Link>
-        </p>
       </div>
     </div>
   );

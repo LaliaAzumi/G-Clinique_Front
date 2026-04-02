@@ -8,7 +8,7 @@ const MOCK_SECRETARIES: Secretary[] = [
     email: "aina.sec@clinique.mg", 
     phone: "032 11 222 33", 
     assignedService: "Accueil Principal",
-    status: "active" 
+    
   },
 ];
 

@@ -2,7 +2,7 @@ import { Patient } from "../types/patient";
 
 // Simulacre de données pour ton rendu actuel (Mock Data)
 const MOCK_PATIENTS: Patient[] = [
-  { id: "1", firstName: "Jean", lastName: "Dupont", email: "jean@mail.com", phone: "03400000", dateOfBirth: "1985-05-12", gender: "M", lastVisit: "2026-03-25" },
+  { id: "1", firstName: "Jean", lastName: "Dupont", email: "jean@mail.com", phone: "03400000", adresse:"Ivato",dateOfBirth: "1985-05-12"},
 ];
 
 export const patientService = {
