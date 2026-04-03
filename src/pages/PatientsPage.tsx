@@ -40,6 +40,8 @@ const PatientsPage = () => {
   return (
     <div className="min-h-screen p-8 text-primary-foreground" 
          style={{ backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
+      {/* overlay sombre */}
+      <div className="absolute inset-0 bg-black opacity-40"></div>
       
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header avec bouton Ajout */}
