@@ -44,6 +44,12 @@ const AppointmentsPage = () => {
       appointmentTime: formData.appointmentTime,
       status: "pending",
       notes: formData.notes,
+      patientId: "",
+      serviceId: "",
+      clinicId: "",
+      duration: 0,
+      createdAt: "",
+      updatedAt: ""
     };
 
     setAppointments([newAppointment, ...appointments]);

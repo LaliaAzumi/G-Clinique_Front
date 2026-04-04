@@ -45,6 +45,8 @@ const ServicesPage = () => {
       price: Number(formData.price),
       duration: Number(formData.duration),
       isActive: true,
+      createdAt: "",
+      updatedAt: ""
     };
 
     setServices([...services, newService]);
