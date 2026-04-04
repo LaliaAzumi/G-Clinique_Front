@@ -59,6 +59,9 @@ const SecretariesPage = () => {
   return (
     <div className="min-h-screen p-8 text-primary-foreground" 
          style={{ backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
+          {/* overlay sombre */}
+      <div className="absolute inset-0 bg-black opacity-40"></div>
+      
       
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex justify-between items-center bg-black/20 backdrop-blur-md p-6 rounded-2xl border border-white/20">
