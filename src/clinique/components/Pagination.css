@@ -18,19 +18,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border);
-  background: var(--white);
-  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 10px;
   cursor: pointer;
-  color: #374151;
+  color: rgba(255, 255, 255, 0.85);
   font-size: 13px;
   font-weight: 500;
   transition: all 0.15s;
 }
 
 .clinique-scope .page-btn:hover:not(:disabled) {
-  background: #f3f4f6;
-  border-color: #d1d5db;
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 .clinique-scope .page-btn:disabled {
@@ -39,8 +41,8 @@
 }
 
 .clinique-scope .page-btn.active {
-  background: var(--blue-primary);
-  border-color: var(--blue-primary);
+  background: var(--primary);
+  border-color: rgba(255, 255, 255, 0.22);
   color: white;
 }
 

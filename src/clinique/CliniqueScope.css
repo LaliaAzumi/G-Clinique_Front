@@ -1,20 +1,53 @@
 .clinique-scope {
-  --blue-primary: #3b5bdb;
-  --blue-dark: #2f4ac7;
-  --blue-sidebar: #2d4eb8;
-  --green-active: #28a745;
-  --gray-inactive: #9ca3af;
-  --red-delete: #ef4444;
-  --white: #ffffff;
-  --border: #e5e7eb;
-  --text-muted: #6b7280;
-  --row-hover: #f9fafb;
+  --primary: #00b894;
+  --primary-2: #00cec9;
+  --primary-3: #74b9ff;
 
-  background: #f0f2f5;
-  color: #1a1a2e;
+  --gray-inactive: rgba(255, 255, 255, 0.55);
+
+  --glass-bg: rgba(255, 255, 255, 0.18);
+  --glass-bg-2: rgba(255, 255, 255, 0.22);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-border-strong: rgba(255, 255, 255, 0.28);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.7);
+
+  background: linear-gradient(135deg, #0a4f4f 0%, #0d7377 35%, #14a085 70%, #38d39f 100%);
+  color: var(--text);
   min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.clinique-scope::before,
+.clinique-scope::after {
+  content: "";
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  filter: blur(48px);
+  z-index: 0;
+}
+
+.clinique-scope::before {
+  top: -180px;
+  left: -180px;
+}
+
+.clinique-scope::after {
+  bottom: -220px;
+  right: -220px;
 }
 
 .clinique-scope * {
   box-sizing: border-box;
+}
+
+.clinique-scope .clinique-layer {
+  position: relative;
+  z-index: 1;
 }

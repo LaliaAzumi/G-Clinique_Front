@@ -1,7 +1,10 @@
 .clinique-scope .sidebar {
   width: 210px;
   min-height: 100vh;
-  background: var(--blue-sidebar);
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   flex-direction: column;
   position: fixed;
