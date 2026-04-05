@@ -104,7 +104,6 @@ const SecretariesPage = () => {
             <thead className="bg-white/10 text-sm">
               <tr>
                 <th className="p-4">Nom / Prénom</th>
-                <th className="p-4">Service</th>
                 <th className="p-4">Contact</th>
               </tr>
             </thead>
@@ -112,7 +111,6 @@ const SecretariesPage = () => {
               {filteredSecretaries.map((sec) => (
                 <tr key={sec.id} className="hover:bg-white/5 transition-colors">
                   <td className="p-4">{sec.username}</td>
-                  <td className="p-4"><span className="bg-primary/20 px-2 py-1 rounded text-xs">{sec.assignedService}</span></td>
                   <td className="p-4 text-sm text-white/70">{sec.email}</td>
                 </tr>
               ))}
