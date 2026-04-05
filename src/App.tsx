@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound.tsx";
 import PatientsPage from "@/pages/PatientsPage.tsx";
 import SecretariesPage from "@/pages/SecretariesPage.tsx";
 import ChambresPage from "@/pages/ChambresPage.tsx";
+import PublicPage from "@/pages/PublicPage.tsx";
+
 
 
 const queryClient = new QueryClient();
@@ -24,6 +26,8 @@ const App = () => (
           <Route path="/patients" element={<PatientsPage />} />
           <Route path="/secretaires" element={<SecretariesPage />} />
           <Route path="/chambres" element={<ChambresPage />} />
+          <Route path="/public" element={<PublicPage />} />
+
           
         </Routes>
       </BrowserRouter>
