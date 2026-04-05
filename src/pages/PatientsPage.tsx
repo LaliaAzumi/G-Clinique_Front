@@ -11,31 +11,86 @@ const PatientsPage = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<any>(null);
 
-  // Récupération dynamique des données (Prêt pour le Backend)
-  useEffect(() => {
-    patientService.getAll().then(setPatients);
-  }, []);
+useEffect(() => {
+  patientService.getAll().then((data) => {
+    console.log("Données reçues de l'API:", data); // <--- AJOUTEZ CECI
+    setPatients(data.content || data);
+  });
+}, []);
 
-  // Filtrage simple pour la démo
-  const filteredPatients = patients.filter(p => 
-    p.lastName.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const handleAddPatient = async (data: any) => {
+const refreshList = async () => {
     try {
-      // Appel au service (prêt pour le Backend)
-      await patientService.create(data);
-      
-      toast.success("Patient ajouté avec succès !");
-      setIsModalOpen(false);
-      // Optionnel : rafraîchir la liste
-      const updated = await patientService.getAll();
-      setPatients(updated);
-    } catch (error) {
-      toast.error("Erreur lors de l'ajout");
+      const data = await patientService.getAll();
+      setPatients(Array.isArray(data) ? data : data.content || []);
+    } catch (e) {
+      toast.error("Erreur de chargement");
     }
   };
+
+  // Suppression
+  const handleDelete = async (id: number) => {
+  if (window.confirm("Voulez-vous vraiment supprimer ce patient ?")) {
+    try {
+      await patientService.delete(id);
+      toast.success("Patient supprimé avec succès");
+      
+      // Rafraîchir l'état local pour faire disparaître la ligne
+      const updatedData = await patientService.getAll();
+      setPatients(updatedData.content || updatedData);
+    } catch (error) {
+      toast.error("Erreur lors de la suppression");
+    }
+  }
+};
+
+  // Ajout ou Modification
+  const handleAddOrUpdate = async (data: any) => {
+    try {
+      if (selectedPatient) {
+        await patientService.update(data);
+        toast.success("Patient mis à jour");
+      } else {
+        await patientService.create(data);
+        toast.success("Patient ajouté");
+      }
+      setIsModalOpen(false);
+      setSelectedPatient(null);
+      refreshList();
+    } catch (error) {
+      toast.error("Erreur lors de l'opération");
+    }
+  };
+  // Filtrage simple pour la démo
+  // Filtrage sur le champ 'nom' retourné par l'API
+const filteredPatients = patients.filter(p => 
+  p.nom && p.nom.toLowerCase().includes(search.toLowerCase())
+);
+
+  // PatientsPage.tsx
+// PatientsPage.tsx
+const handleAddPatient = async (payload: any) => {
+  try {
+    if (selectedPatient) {
+      // On s'assure que l'ID est bien présent pour la mise à jour
+      const updatePayload = { ...payload, id: selectedPatient.id };
+      await patientService.update(updatePayload);
+      toast.success("Patient mis à jour !");
+    } else {
+      await patientService.create(payload);
+      toast.success("Patient ajouté !");
+    }
+    
+    setIsModalOpen(false);
+    setSelectedPatient(null);
+    refreshList(); // Recharge le tableau
+  } catch (error: any) {
+    toast.error("Erreur : " + error.message);
+  }
+};
+
+
 
   return (
     <div className="min-h-screen p-8 text-primary-foreground" 
@@ -55,7 +110,10 @@ const PatientsPage = () => {
 
   <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
     <DialogTrigger asChild>
-      <button className="login-btn !w-auto px-6 flex items-center gap-2">
+      <button 
+        onClick={() => { setSelectedPatient(null); setIsModalOpen(true); }} 
+        className="login-btn..."
+      >
         <UserPlus size={18} /> Nouveau Patient
       </button>
     </DialogTrigger>
@@ -69,7 +127,8 @@ const PatientsPage = () => {
       
       <AddPatientForm 
         onSubmit={handleAddPatient} 
-        onCancel={() => setIsModalOpen(false)} 
+        onCancel={() => { setIsModalOpen(false); setSelectedPatient(null); }} 
+        initialData={selectedPatient} // On passe les données ici !
       />
     </DialogContent>
   </Dialog>
@@ -97,27 +156,34 @@ const PatientsPage = () => {
                 <th className="p-4">DATE NAISSANCE</th>
                 <th className="p-4 ">TELEPHONE</th>
                 <th className="p-4 ">ADRESSE</th>
-                <th className="p-4 ">MAIL</th>
                 <th className="p-4 ">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
               {filteredPatients.map((patient) => (
                 <tr key={patient.id} className="hover:bg-white/5 transition-colors">
-                  <td className="p-4 font-medium">{patient.lastName} </td>
-                  <td className="p-4 text-sm text-white/70">{patient.firstName}  </td>
-                  <td className="p-4 text-sm">{patient.dateOfBirth}</td>
-                  <td className="p-4 text-sm">{patient.phone}</td>
-                  <td className="p-4 text-sm">{patient.adresse}</td>
-                  <td className="p-4 text-sm">{patient.email}</td>
-                  
-                  <td className="p-4 flex justify-center gap-3">
-                    <button className="p-2 hover:bg-white/10 rounded-lg text-primary"><Edit size={16}/></button>
-                    <button className="p-2 hover:bg-white/10 rounded-lg text-red-400"><Trash2 size={16}/></button>
+                  <td className="p-4">{patient.nom}</td>
+                  <td className="p-4">{patient.prenom}</td>
+                  <td className="p-4">{patient.dateNaissance}</td>
+                  <td className="p-4">{patient.telephone}</td>
+                  <td className="p-4">{patient.adresse}</td>
+                  <td className="p-4 flex gap-3">
+                    <button 
+                      onClick={() => { setSelectedPatient(patient); setIsModalOpen(true); }}
+                      className="p-2 hover:bg-white/10 rounded-lg text-primary"
+                    >
+                      <Edit size={16}/>
+                    </button>
+                    <button 
+                      onClick={() => handleDelete(patient.id)}
+                      className="p-2 hover:bg-white/10 rounded-lg text-red-400"
+                    >
+                      <Trash2 size={16}/>
+                    </button>
                   </td>
                 </tr>
               ))}
-            </tbody>
+    </tbody>
           </table>
           {filteredPatients.length === 0 && (
             <div className="p-10 text-center text-white/40">Aucun patient trouvé.</div>

@@ -30,5 +30,43 @@ getAll: async (page = 0, size = 10): Promise<any> => {
         throw new Error(errorData.detail || "Erreur serveur");
     }
     return response.json();
-}
+},
+create: async (patient: any) => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE_URL}/save`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify(patient),
+    });
+    if (!response.ok) throw new Error("Erreur lors de l'ajout");
+    return response.json();
+  },
+
+  update: async (patient: any) => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE_URL}/update`, {
+      method: "PUT",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify(patient),
+    });
+    if (!response.ok) throw new Error("Erreur lors de la modification");
+    return response.json();
+  },
+
+  delete: async (id: number) => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` },
+    });
+    if (!response.ok) throw new Error("Erreur lors de la suppression");
+    return response.json();
+  }
 };
+
