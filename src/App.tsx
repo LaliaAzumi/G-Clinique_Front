@@ -16,6 +16,7 @@ import AppointmentsPage from "@/pages/AppointmentsPage.tsx";
 import SettingsPage from "@/pages/SettingsPage.tsx";
 import MedecinsPage from "@/pages/MedecinsPage.tsx";
 import ChambresPage from "@/pages/ChambresPage.tsx";
+import FullProject from "./pages/FullProject.tsx";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,8 @@ const App = () => (
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/patients" element={<PatientsPage />} />
           <Route path="/secretaires" element={<SecretariesPage />} />
+          <Route path="/fullProject" element={<FullProject />} />
+
 
           <Route path="*" element={<NotFound />} />
           <Route path="/chambres" element={<ChambresPage />} />
