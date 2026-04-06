@@ -1,0 +1,305 @@
+.clinique-scope .page-container {
+  max-width: 100%;
+}
+
+.clinique-scope .page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  background: var(--glass-bg-2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 18px 20px;
+}
+
+.clinique-scope .page-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 4px;
+}
+
+.clinique-scope .breadcrumb {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.clinique-scope .btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.clinique-scope .btn-primary:hover {
+  background: #00a884;
+}
+
+.clinique-scope .table-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  padding: 20px;
+}
+
+.clinique-scope .table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.clinique-scope .search-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 8px 14px;
+  flex: 1;
+  max-width: 360px;
+}
+
+.clinique-scope .search-input .search-icon {
+  color: var(--gray-inactive);
+  flex-shrink: 0;
+}
+
+.clinique-scope .search-input input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  width: 100%;
+}
+
+.clinique-scope .search-input input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.clinique-scope .filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.clinique-scope .filter-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+}
+
+.clinique-scope .filter-select {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 8px 32px 8px 12px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.clinique-scope .filter-select:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.clinique-scope .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.clinique-scope .data-table th {
+  text-align: left;
+  padding: 10px 16px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  white-space: nowrap;
+}
+
+.clinique-scope .data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  vertical-align: middle;
+}
+
+.clinique-scope .data-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.clinique-scope .data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.clinique-scope .name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clinique-scope .avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #d1d5db;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.clinique-scope .avatar::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #9ca3af;
+}
+
+.clinique-scope .avatar::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #9ca3af;
+  z-index: 1;
+}
+
+.clinique-scope .avatar-female {
+  background: #fce7f3;
+}
+
+.clinique-scope .avatar-female::before,
+.clinique-scope .avatar-female::after {
+  background: #f9a8d4;
+}
+
+.clinique-scope .badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.clinique-scope .badge-actif {
+  background: var(--green-active);
+  color: white;
+}
+
+.clinique-scope .badge-inactif {
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+.clinique-scope .actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.clinique-scope .action-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+  background: transparent;
+}
+
+.clinique-scope .action-btn.view {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.clinique-scope .action-btn.view:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.clinique-scope .action-btn.edit {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.clinique-scope .action-btn.edit:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.clinique-scope .action-btn.delete {
+  color: rgba(255, 100, 100, 0.95);
+}
+
+.clinique-scope .action-btn.delete:hover {
+  background: rgba(255, 100, 100, 0.18);
+}
+
+.clinique-scope .sexe-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.clinique-scope .sexe-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clinique-scope .sexe-homme {
+  background: #dbeafe;
+  color: #3b82f6;
+}
+
+.clinique-scope .sexe-femme {
+  background: #fce7f3;
+  color: #ec4899;
+}
+
+.clinique-scope .patient-name strong {
+  margin-right: 2px;
+}
+
+.clinique-scope .text-muted {
+  color: var(--text-muted);
+}
