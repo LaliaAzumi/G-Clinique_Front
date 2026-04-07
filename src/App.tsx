@@ -14,6 +14,7 @@ import ServicesPage from "@/pages/ServicesPage.tsx";
 import AppointmentsPage from "@/pages/AppointmentsPage.tsx";
 import SettingsPage from "@/pages/SettingsPage.tsx";
 import MedecinsPage from "@/pages/MedecinsPage.tsx";
+<<<<<<< HEAD
 =========
 import CliniqueAppLayout from "./clinique/CliniqueAppLayout";
 import Dashboard from "./clinique/pages/Dashboard";
@@ -22,6 +23,9 @@ import ListeMedecins from "./clinique/pages/ListeMedecins";
 import ListeSecretaires from "./clinique/pages/ListeSecretaires";
 import PlaceholderPage from "./clinique/pages/PlaceholderPage";
 >>>>>>>>> Temporary merge branch 2
+=======
+import ChambresPage from "@/pages/ChambresPage.tsx";
+>>>>>>> main
 
 const queryClient = new QueryClient();
 
@@ -44,6 +48,7 @@ const App = () => (
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/patients" element={<PatientsPage />} />
           <Route path="/secretaires" element={<SecretariesPage />} />
+<<<<<<< HEAD
 =========
           <Route path="/dashboard" element={<Navigate to="/app/dashboard" replace />} />
           <Route path="/patients" element={<Navigate to="/app/patients" replace />} />
@@ -63,6 +68,9 @@ const App = () => (
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
 >>>>>>>>> Temporary merge branch 2
+=======
+
+>>>>>>> main
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
