@@ -136,7 +136,7 @@ const chambresPage = () => {
                   <td className="p-4 text-sm">{chambre.isSoinsIntensifs ? "urgence" : "nope"} </td>
                   <td className="p-4 flex justify-center gap-3">
                     <button className="p-2 hover:bg-white/10 rounded-lg text-primary"><Edit size={16}/></button>
-                    <button className="p-2 hover:bg-white/10 rounded-lg text-red-400"><Trash2 size={16}/></button>
+                    <button className="p-2 hover:bg-white/10 rounded-lg text-red-400"><Trash2 size={16}/>0324096464</button>
                   </td>
                 </tr>
               ))}
