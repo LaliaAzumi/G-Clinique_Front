@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Eye, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { secretaires } from "../data/mockData";
 import Pagination from "../components/Pagination";
+// Import du formulaire spécifique et des composants de dialogue
+import AddSecretaryForm from "../../components/AddSecretaryForm";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import "./ListePage.css";
 
 const ITEMS_PER_PAGE = 10;
@@ -9,6 +12,7 @@ const ITEMS_PER_PAGE = 10;
 export default function ListeSecretaires() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filtered = secretaires.filter((s) => {
     const matchSearch =
@@ -22,6 +26,11 @@ export default function ListeSecretaires() {
     currentPage * ITEMS_PER_PAGE,
   );
 
+  const handleAddSuccess = () => {
+    setIsModalOpen(false);
+    // Logique de rafraîchissement des données ici
+  };
+
   return (
     <div className="page-container">
       <div className="page-header">
@@ -29,10 +38,26 @@ export default function ListeSecretaires() {
           <h1 className="page-title">Liste des secrétaires</h1>
           <p className="breadcrumb">Tableau de bord › Secrétaires</p>
         </div>
-        <button className="btn-primary" type="button">
-          <Plus size={16} />
-          Ajouter un secrétaire
-        </button>
+
+        {/* Modale d'ajout de secrétaire */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogTrigger asChild>
+            <button className="btn-primary" type="button">
+              <Plus size={16} />
+              Ajouter un secrétaire
+            </button>
+          </DialogTrigger>
+          <DialogContent className="glass-card border-white/20 text-white sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold">Nouveau compte secrétaire</DialogTitle>
+            </DialogHeader>
+            
+            <AddSecretaryForm 
+              onSubmit={handleAddSuccess} 
+              onCancel={() => setIsModalOpen(false)} 
+            />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="table-card">
@@ -41,7 +66,7 @@ export default function ListeSecretaires() {
             <Search size={15} className="search-icon" />
             <input
               type="text"
-              placeholder="Rechercher..."
+              placeholder="Rechercher par identifiant ou email..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -57,26 +82,26 @@ export default function ListeSecretaires() {
               <th>ID</th>
               <th>Username</th>
               <th>E-mail</th>
-              <th>Actions</th>
+              <th className="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {paginated.map((s) => (
               <tr key={s.id}>
-                <td>{s.id}</td>
+                <td><span className="id-badge">{s.id}</span></td>
                 <td>
                   <strong>{s.username}</strong>
                 </td>
                 <td className="text-muted">{s.email}</td>
                 <td>
                   <div className="actions-cell">
-                    <button className="action-btn view" type="button">
+                    <button className="action-btn view" title="Voir profil">
                       <Eye size={15} />
                     </button>
-                    <button className="action-btn edit" type="button">
+                    <button className="action-btn edit" title="Modifier">
                       <Pencil size={15} />
                     </button>
-                    <button className="action-btn delete" type="button">
+                    <button className="action-btn delete" title="Supprimer">
                       <Trash2 size={15} />
                     </button>
                   </div>
@@ -86,12 +111,18 @@ export default function ListeSecretaires() {
           </tbody>
         </table>
 
-        <Pagination
-          currentPage={currentPage}
-          totalItems={filtered.length}
-          itemsPerPage={ITEMS_PER_PAGE}
-          onPageChange={setCurrentPage}
-        />
+        {filtered.length > 0 ? (
+          <Pagination
+            currentPage={currentPage}
+            totalItems={filtered.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+            onPageChange={setCurrentPage}
+          />
+        ) : (
+          <div className="p-12 text-center text-white/30 italic">
+            Aucun membre administratif trouvé pour cette recherche.
+          </div>
+        )}
       </div>
     </div>
   );
