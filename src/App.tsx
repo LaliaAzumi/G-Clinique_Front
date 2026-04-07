@@ -14,14 +14,7 @@ import ServicesPage from "@/pages/ServicesPage.tsx";
 import AppointmentsPage from "@/pages/AppointmentsPage.tsx";
 import SettingsPage from "@/pages/SettingsPage.tsx";
 import MedecinsPage from "@/pages/MedecinsPage.tsx";
-=========
-import CliniqueAppLayout from "./clinique/CliniqueAppLayout";
-import Dashboard from "./clinique/pages/Dashboard";
-import ListePatients from "./clinique/pages/ListePatients";
-import ListeMedecins from "./clinique/pages/ListeMedecins";
-import ListeSecretaires from "./clinique/pages/ListeSecretaires";
-import PlaceholderPage from "./clinique/pages/PlaceholderPage";
->>>>>>>>> Temporary merge branch 2
+import ChambresPage from "@/pages/ChambresPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -44,25 +37,7 @@ const App = () => (
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/patients" element={<PatientsPage />} />
           <Route path="/secretaires" element={<SecretariesPage />} />
-=========
-          <Route path="/dashboard" element={<Navigate to="/app/dashboard" replace />} />
-          <Route path="/patients" element={<Navigate to="/app/patients" replace />} />
-          <Route path="/medecins" element={<Navigate to="/app/medecins" replace />} />
-          <Route path="/secretaires" element={<Navigate to="/app/secretaires" replace />} />
-          <Route path="/app" element={<CliniqueAppLayout />}>
-            <Route index element={<Navigate to="/app/dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="patients" element={<ListePatients />} />
-            <Route path="medecins" element={<ListeMedecins />} />
-            <Route path="secretaires" element={<ListeSecretaires />} />
-            <Route path="rendez-vous" element={<PlaceholderPage title="Rendez-vous" />} />
-            <Route path="consultations" element={<PlaceholderPage title="Consultations" />} />
-            <Route path="ordonnances" element={<PlaceholderPage title="Ordonnances" />} />
-            <Route path="paiements" element={<PlaceholderPage title="Paiements" />} />
-            <Route path="*" element={<Navigate to="/app/dashboard" replace />} />
-          </Route>
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
->>>>>>>>> Temporary merge branch 2
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
