@@ -83,7 +83,7 @@ export const medecinService = {
     });
 
     if (!response.ok) throw new Error("Erreur lors de la suppression");
-  },
+ },
 
   update: async (id: number | string, data: Medecin): Promise<any> => {
     const token = localStorage.getItem("token"); // Récupère ton token JWT si nécessaire
@@ -108,5 +108,6 @@ export const medecinService = {
       console.error("Erreur dans medecinService.update :", error);
       throw error;
     }
+
   }
 };
