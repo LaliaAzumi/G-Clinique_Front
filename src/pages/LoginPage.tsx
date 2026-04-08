@@ -40,6 +40,8 @@ const LoginPage = () => {
         backgroundPosition: "center",
       }}
     >
+      {/* Overlay sombre */}
+  <div className="absolute inset-0 bg-black/40 z-0"></div>
       {/* Glass login card */}
       <div className="glass-card w-full max-w-md px-8 py-10 sm:px-10">
         {/* Logo */}
@@ -51,10 +53,10 @@ const LoginPage = () => {
 
         {/* Title */}
         <h1 className="mb-2 text-center text-2xl font-bold text-primary-foreground">
-          Welcome Back!
+          Bienvenue sur G-Clinique
         </h1>
         <p className="mb-8 text-center text-sm text-primary-foreground/70">
-          Name user
+        Connexion requise.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -101,14 +103,14 @@ const LoginPage = () => {
             SIGN IN
           </button>
 
-          {/* Divider */}
+          {/* Divider 
           <div className="flex items-center gap-3">
             <div className="h-px flex-1 bg-primary-foreground/20" />
             <span className="text-xs text-primary-foreground/50">or</span>
             <div className="h-px flex-1 bg-primary-foreground/20" />
-          </div>
+          </div>*/}
 
-          {/* Google */}
+          {/* Google 
           <button type="button" className="google-btn">
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path
@@ -129,16 +131,16 @@ const LoginPage = () => {
               />
             </svg>
             Continue with Google
-          </button>
+          </button>*/}
         </form>
 
-        {/* Sign up link */}
+        {/* Sign up link 
         <p className="mt-6 text-center text-sm text-primary-foreground/60">
           Don't have an account?{" "}
           <a href="#" className="font-semibold text-primary-foreground hover:underline">
             Sign Up
           </a>
-        </p>
+        </p>*/}
       </div>
     </div>
   );
