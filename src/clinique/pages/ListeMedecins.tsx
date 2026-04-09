@@ -84,37 +84,76 @@ const handleEditClick = (medecin: Medecin) => {
   );
 
   if (loading) return <div className="p-10">Chargement des données...</div>;
-  const handleSave = async () => {
-    // 1. Vérifie si l'objet existe
-    if (!selectedMedecin) {
-        console.error("Aucun médecin sélectionné dans le state");
-        return;
+ const handleSave = async () => {
+  if (!selectedMedecin) return;
+
+  try {
+    if (selectedMedecin.medecinId) {
+      // MODE ÉDITION (Update) - On garde l'objet tel quel car ton @PutMapping est différent
+      await medecinService.update(selectedMedecin.medecinId, selectedMedecin);
+      alert("Médecin modifié avec succès !");
+    } else {
+      // MODE CRÉATION - On restructure pour correspondre au Java
+      const dataToCreate = {
+        medecin: {
+          nom: selectedMedecin.nom,
+          specialite: selectedMedecin.specialite,
+          telephone: selectedMedecin.telephone,
+          adresse: selectedMedecin.adresse
+        },
+        username: (selectedMedecin as any).username,
+        email: (selectedMedecin as any).email
+      };
+
+      console.log("Envoi de la structure correcte :", dataToCreate);
+      
+      await medecinService.createWithUser(dataToCreate);
+      alert("Médecin et compte utilisateur créés !");
     }
 
-    // 2. Vérifie si l'ID est bien présent
-    console.log("ID envoyé au backend :", selectedMedecin.id);
-    console.log("Données complètes :", selectedMedecin);
-
-    if (!selectedMedecin.id) {
-        alert("Erreur : L'ID du médecin est manquant !");
-        return;
-    }
-
-    try {
-        // On force le passage de l'ID en premier argument
-        // await medecinService.update(selectedMedecin.id, selectedMedecin);
-        // Dans ton code React, change cette ligne :
-await medecinService.update(selectedMedecin.medecinId, selectedMedecin); 
-// Au lieu de selectedMedecin.id qui semble être erroné
-        
-        setIsModalOpen(false);
-        fetchMedecins(); // Recharge la liste
-        alert("Modification enregistrée !");
-    } catch (error) {
-        console.error("Erreur save:", error);
-        alert("Erreur lors de la sauvegarde : " + error);
-    }
+    setIsModalOpen(false);
+    fetchMedecins();
+  } catch (error) {
+    console.error("Erreur save:", error);
+    alert("Une erreur est survenue lors de la création.");
+  }
 };
+const handleDeleteClick = async (id: number | string) => {
+  if (window.confirm("Voulez-vous vraiment supprimer ce médecin ?")) {
+    try {
+      await medecinService.delete(id.toString());
+      alert("Médecin supprimé !");
+      fetchMedecins(); // Rafraîchit la liste automatiquement
+    } catch (error) {
+      console.error("Erreur lors de la suppression:", error);
+      alert("Erreur lors de la suppression.");
+    }
+  }
+};
+const handleAddClick = () => {
+  setSelectedMedecin({
+    nom: "",
+    specialite: "",
+    telephone: "",
+    email: "",
+    username: "",
+    adresse: "",
+  } as any);
+
+  setIsEditMode(true);
+  setIsModalOpen(true);
+};
+
+const SPECIALITES_LISTE = [
+  "Cardiologie",
+  "Dermatologie",
+  "Généraliste",
+  "Neurologie",
+  "Pédiatrie",
+  "Psychiatrie",
+  "Radiologie",
+  "Ophtalmologie"
+];
 
   return (
     <div className="page-container">
@@ -194,7 +233,7 @@ await medecinService.update(selectedMedecin.medecinId, selectedMedecin);
           <h1 className="page-title">Liste des médecins</h1>
           <p className="breadcrumb">Tableau de bord › Médecins</p>
         </div>
-        <button className="btn-primary" type="button">
+        <button className="btn-primary" type="button"onClick={handleAddClick}>
           <Plus size={16} /> Ajouter un médecin
         </button>
       </div>
@@ -256,7 +295,7 @@ await medecinService.update(selectedMedecin.medecinId, selectedMedecin);
                       <Eye size={15} />
                     </button>
                     <button className="action-btn edit" onClick={() => handleEditClick(m)}><Pencil size={15} /></button>
-                    <button className="action-btn delete"><Trash2 size={15} /></button>
+                    <button className="action-btn delete" onClick={() => handleDeleteClick(m.medecinId)}><Trash2 size={15} /></button>
                   </div>
                 </td>
               </tr>
@@ -273,94 +312,142 @@ await medecinService.update(selectedMedecin.medecinId, selectedMedecin);
       </div>
 
       {/* AFFICHAGE CONDITIONNEL DE LA MODALE */}
-      {isModalOpen && selectedMedecin && (
-        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Fiche Médecin</h2>
-              <button className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</button>
-            </div>
-            <div className="modal-body">
-              <div className="info-row"><strong>ID</strong>
-               <span>{selectedMedecin.medecinId}</span></div>
-              <div className="info-row"><strong>Nom</strong>
-              {/* <span>{selectedMedecin.nom}</span></div> */}{isEditMode ? (
-                <input 
-                  className="modal-input"
-                  defaultValue={selectedMedecin.nom} 
-                  onChange={(e) => setSelectedMedecin({...selectedMedecin, nom: e.target.value})}
-                />
-              ) : (
-                <span>{selectedMedecin.nom}</span>
-              )}</div>
-              <div className="info-row"><strong>Spécialité</strong>
-               {/* <span>{selectedMedecin.specialite}</span></div> */}
-               {isEditMode ? (
-                <input 
-                  className="modal-input"
-                  defaultValue={selectedMedecin.specialite} 
-                  onChange={(e) => setSelectedMedecin({...selectedMedecin, specialite: e.target.value})}
-                />
-              ) : (
-                <span>{selectedMedecin.specialite}</span>
-              )}</div>
-              <div className="info-row"><strong>Téléphone</strong>
-               {/* <span>{selectedMedecin.telephone}</span></div> */}
-               {isEditMode ? (
-                <input 
-                  className="modal-input"
-                  defaultValue={selectedMedecin.telephone} 
-                  onChange={(e) => setSelectedMedecin({...selectedMedecin, telephone: e.target.value})}
-                />
-              ) : (
-                <span>{selectedMedecin.telephone}</span>
-              )}</div>
-              <div className="info-row"><strong>Email</strong> 
-              {/* <span>{selectedMedecin.email || "Non défini"}</span></div> */}
-               {isEditMode ? (
-                <input 
-                  className="modal-input"
-                  defaultValue={selectedMedecin.email} 
-                  onChange={(e) => setSelectedMedecin({...selectedMedecin, email: e.target.value})}
-                />
-              ) : (
-                <span>{selectedMedecin.email}</span>
-              )}</div>
-              <div className="info-row"><strong>Utilisateur</strong> 
-              {/* <span>{(selectedMedecin as any).username || "N/A"}</span></div> */}
-               {isEditMode ? (
-                <input 
-                  className="modal-input"
-                  defaultValue={(selectedMedecin as any).username} 
-                  onChange={(e) => setSelectedMedecin({...selectedMedecin, username: e.target.value})}
-                />
-              ) : (
-                <span>{(selectedMedecin as any).username}</span>
-              )}</div>
-              <div className="info-row"><strong>adresse</strong> 
-              {/* <span>{(selectedMedecin as any).adresse }</span></div> */}
-              {isEditMode ? (
-                <input 
-                  className="modal-input"
-                  value={selectedMedecin.adresse} 
-                  onChange={(e) => setSelectedMedecin({...selectedMedecin, adresse: e.target.value})}
-                />
-              ) : (
-                <span>{selectedMedecin.adresse}</span>
-              )}</div>
+{isModalOpen && selectedMedecin && (
+  <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      
+      {/* HEADER : Titre dynamique */}
+      <div className="modal-header">
+        <h2>
+          {selectedMedecin.medecinId 
+            ? `Modifier le Médecin : ${selectedMedecin.nom}` 
+            : "Ajouter un nouveau Médecin"}
+        </h2>
+        <button className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</button>
+      </div>
 
-            </div>
-            <div className="modal-footer">
-              <button className="btn-close-modal" onClick={() => setIsModalOpen(false)}>Fermer</button>
-              {isEditMode && (
-    <button className="btn-primary" onClick={handleSave}>
-      Enregistrer
-    </button>
-  )}
-            </div>
+      {/* BODY : Formulaire ou Consultation */}
+      <div className="modal-body">
+        
+        {/* ID : Affiché uniquement en modification */}
+        {selectedMedecin.medecinId && (
+          <div className="info-row">
+            <strong>ID</strong>
+            <span>{selectedMedecin.medecinId}</span>
           </div>
+        )}
+
+        {/* NOM */}
+        <div className="info-row">
+          <strong>Nom</strong>
+          {isEditMode ? (
+            <input 
+              className="modal-input"
+              value={selectedMedecin.nom || ""} 
+              onChange={(e) => setSelectedMedecin({...selectedMedecin, nom: e.target.value})}
+            />
+          ) : (
+            <span>{selectedMedecin.nom}</span>
+          )}
         </div>
-      )}
+
+      
+
+        {/* SPÉCIALITÉ */}
+        <div className="info-row">
+  <strong>Spécialité</strong>
+  {isEditMode ? (
+    <select 
+      className="modal-input"
+      value={selectedMedecin.specialite || ""} 
+      onChange={(e) => setSelectedMedecin({...selectedMedecin, specialite: e.target.value})}
+    >
+      <option value="" disabled>Choisir une spécialité</option>
+      {SPECIALITES_LISTE.map((spec) => (
+        <option key={spec} value={spec}>
+          {spec}
+        </option>
+      ))}
+    </select>
+  ) : (
+    <span>{selectedMedecin.specialite}</span>
+  )}
+</div>
+
+        {/* TÉLÉPHONE */}
+        <div className="info-row">
+          <strong>Téléphone</strong>
+          {isEditMode ? (
+            <input 
+              className="modal-input"
+              value={selectedMedecin.telephone || ""} 
+              onChange={(e) => setSelectedMedecin({...selectedMedecin, telephone: e.target.value})}
+            />
+          ) : (
+            <span>{selectedMedecin.telephone}</span>
+          )}
+        </div>
+
+        {/* EMAIL (Sert aussi pour la création du compte utilisateur) */}
+        <div className="info-row">
+          <strong>Email</strong>
+          {isEditMode ? (
+            <input 
+              className="modal-input"
+              type="email"
+              value={selectedMedecin.email || ""} 
+              onChange={(e) => setSelectedMedecin({...selectedMedecin, email: e.target.value})}
+            />
+          ) : (
+            <span>{selectedMedecin.email || "Non défini"}</span>
+          )}
+        </div>
+
+        {/* NOM D'UTILISATEUR (Pour le compte lié) */}
+        <div className="info-row">
+          <strong>Utilisateur</strong>
+          {isEditMode ? (
+            <input 
+              className="modal-input"
+              placeholder="Nom de connexion"
+              value={(selectedMedecin as any).username || ""} 
+              onChange={(e) => setSelectedMedecin({...selectedMedecin, username: e.target.value})}
+            />
+          ) : (
+            <span>{(selectedMedecin as any).username || "N/A"}</span>
+          )}
+        </div>
+
+        {/* ADRESSE */}
+        <div className="info-row">
+          <strong>Adresse</strong>
+          {isEditMode ? (
+            <input 
+              className="modal-input"
+              value={selectedMedecin.adresse || ""} 
+              onChange={(e) => setSelectedMedecin({...selectedMedecin, adresse: e.target.value})}
+            />
+          ) : (
+            <span>{selectedMedecin.adresse || "Non renseignée"}</span>
+          )}
+        </div>
+      </div>
+
+      {/* FOOTER : Actions */}
+      <div className="modal-footer">
+        <button className="btn-close-modal" onClick={() => setIsModalOpen(false)}>
+          Annuler
+        </button>
+        {isEditMode && (
+          <button className="btn-primary" onClick={handleSave}>
+            {selectedMedecin.medecinId ? "Enregistrer les modifications" : "Créer le médecin"}
+          </button>
+        )}
+      </div>
+
+    </div>
+  </div>
+)}
     </div>
   );
 }

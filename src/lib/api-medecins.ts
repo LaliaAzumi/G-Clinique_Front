@@ -62,28 +62,33 @@ export const medecinService = {
   /**
    * Création d'un médecin dans la BDD
    */
-  create: async (data: Omit<Medecin, "id">): Promise<Medecin> => {
-    const response = await fetch(`${API_URL}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) throw new Error("Erreur lors de la création");
-    const result = await response.json();
-    return result.data;
-  },
-
+  // Dans votre fichier lib/api-medecins.ts
+createWithUser: async (data: any) => {
+  const response = await fetch(`${API_URL}/create-with-user`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`, // Ajustez selon votre gestion de token
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error("Erreur lors de la création");
+  return response.json();
+},
   /**
    * Suppression d'un médecin dans la BDD
    */
   delete: async (id: string): Promise<void> => {
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: "DELETE",
-    });
+  const token = localStorage.getItem("token"); // Récupère ton token
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${token}` // <--- Crucial
+    },
+  });
 
-    if (!response.ok) throw new Error("Erreur lors de la suppression");
- },
+  if (!response.ok) throw new Error("Erreur lors de la suppression");
+},
 
   update: async (id: number | string, data: Medecin): Promise<any> => {
     const token = localStorage.getItem("token"); // Récupère ton token JWT si nécessaire
