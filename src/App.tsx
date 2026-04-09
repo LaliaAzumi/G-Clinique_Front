@@ -11,7 +11,9 @@ import ListePatients from "./clinique/pages/ListePatients";
 import ListeMedecins from "./clinique/pages/ListeMedecins";
 import ListeSecretaires from "./clinique/pages/ListeSecretaires";
 import PlaceholderPage from "./clinique/pages/PlaceholderPage";
-
+import FullProject from "./pages/FullProject";
+import ChambresPage from "./pages/ChambresPage";
+import RevenueDashboard from "./clinique/pages/RevenueDashboard";
 
 const queryClient = new QueryClient();
 
@@ -21,20 +23,21 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        
         <Routes>
-          {/* Routes principales */}
+          {/* 1. Page d'accueil */}
           <Route path="/" element={<Index />} />
 
-          <Route path="/dashboard" element={<Navigate to="/app/dashboard" replace />} />
+          {/* 2. Redirections automatiques vers le layout de la clinique */}
+          
           <Route path="/patients" element={<Navigate to="/app/patients" replace />} />
           <Route path="/medecins" element={<Navigate to="/app/medecins" replace />} />
           <Route path="/secretaires" element={<Navigate to="/app/secretaires" replace />} />
+          <Route path="/chambres" element={<ChambresPage />} />
 
-          {/* Structure imbriquée (Layout Clinique) */}
+          {/* 3. Groupe "App" avec Layout (Tout ce qui est dedans s'affiche dans le Layout) */}
           <Route path="/app" element={<CliniqueAppLayout />}>
             <Route index element={<Navigate to="/app/dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="dashboard" element={<RevenueDashboard />} />
             <Route path="patients" element={<ListePatients />} />
             <Route path="medecins" element={<ListeMedecins />} />
             <Route path="secretaires" element={<ListeSecretaires />} />
@@ -42,12 +45,15 @@ const App = () => (
             <Route path="consultations" element={<PlaceholderPage title="Consultations" />} />
             <Route path="ordonnances" element={<PlaceholderPage title="Ordonnances" />} />
             <Route path="paiements" element={<PlaceholderPage title="Paiements" />} />
+            <Route path="fullProject" element={<FullProject />} />
+            
+            {/* Si on tape une mauvaise adresse dans /app/, on revient au dashboard */}
             <Route path="*" element={<Navigate to="/app/dashboard" replace />} />
           </Route>
 
-          {/* Page 404 */}
+          {/* 4. Page 404 (TOUJOURS EN DERNIER) */}
           <Route path="*" element={<NotFound />} />
-        </Routes> 
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

@@ -40,6 +40,9 @@ const LoginPage = () => {
         backgroundPosition: "center",
       }}
     >
+      {/* overlay sombre */}
+      <div className="absolute inset-0 bg-black opacity-40"></div>
+      
       {/* Glass login card */}
       <div className="glass-card w-full max-w-md px-8 py-10 sm:px-10">
         {/* Logo */}

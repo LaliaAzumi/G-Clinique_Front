@@ -14,7 +14,7 @@
   --text: #ffffff;
   --text-muted: rgba(255, 255, 255, 0.7);
 
-  background: linear-gradient(135deg, #0a4f4f 0%, #0d7377 35%, #14a085 70%, #38d39f 100%);
+  background: linear-gradient(135deg, #053f3f 0%, #0c5658 35%, #0d5a4b 70%, #1a5f48 100%);
   color: var(--text);
   min-height: 100vh;
   position: relative;
