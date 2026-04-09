@@ -11,6 +11,7 @@ import ListePatients from "./clinique/pages/ListePatients";
 import ListeMedecins from "./clinique/pages/ListeMedecins";
 import ListeSecretaires from "./clinique/pages/ListeSecretaires";
 import PlaceholderPage from "./clinique/pages/PlaceholderPage";
+import AgendaMedecins from "./clinique/pages/AgendaMedecins.tsx";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,8 @@ const App = () => (
             <Route path="consultations" element={<PlaceholderPage title="Consultations" />} />
             <Route path="ordonnances" element={<PlaceholderPage title="Ordonnances" />} />
             <Route path="paiements" element={<PlaceholderPage title="Paiements" />} />
+            <Route path="agenda" element={<AgendaMedecins/>} />
+
             <Route path="*" element={<Navigate to="/app/dashboard" replace />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
