@@ -5,12 +5,12 @@ import {
   Search, 
   Plus, 
   Trash2, 
-  Eye, 
   Pencil, 
   CreditCard,
   RefreshCw,
   AlertCircle,
-  User
+  User,
+  XCircle // Import de l'icône Croix pour l'annulation
 } from "lucide-react";
 import { appointmentService } from "@/lib/api-appointments";
 import Pagination from "../components/Pagination";
@@ -18,13 +18,27 @@ import AddRdvForm from "@/components/AddRdvForm";
 import "./ListePage.css";
 
 const ITEMS_PER_PAGE = 8;
-
+const getStatusDetails = (statut: string) => {
+  switch (statut) {
+    case 'PLANIFIE':
+      return { label: 'En attente', className: 'status-pending' }; // Jaune
+    case 'CONFIRME':
+      return { label: 'Confirmé', className: 'status-success' }; // Vert
+    case 'ANNULE':
+      return { label: 'Annulé', className: 'status-danger' }; // Rouge
+    case 'TERMINE':
+      return { label: 'Terminé', className: 'status-neutral' }; // Gris/Bleu
+    default:
+      return { label: statut, className: 'status-neutral' };
+  }
+};
 export default function ListeRdv() {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [statusFilter, setStatusFilter] = useState("Tous"); // Nouveau state
   
   // États pour la gestion du formulaire (Modal)
   const [showForm, setShowForm] = useState(false);
@@ -60,6 +74,32 @@ export default function ListeRdv() {
     }
   };
 
+// ListeRdv.tsx
+// ListeRdv.tsx
+// Dans ListeRdv.tsx
+const handleCancelRdv = async (rdv: any) => {
+  if (!rdv || !rdv.id) return;
+
+  if (window.confirm("Voulez-vous vraiment annuler ce rendez-vous ?")) {
+    const payload = {
+      id: Number(rdv.id),
+      patientId: rdv.patient?.id, // On envoie juste l'ID
+      medecinId: rdv.medecin?.id, // On envoie juste l'ID
+      date: rdv.date,
+      heure: rdv.heure,
+      motif: rdv.motif,
+      statut: "ANNULE" // La valeur clé
+    };
+    
+    try {
+      await appointmentService.save(payload);
+      await fetchRdv(); // Force le rafraîchissement
+    } catch (err) {
+      alert("Erreur lors de l'annulation");
+    }
+  }
+};
+
   // Handler Validation Paiement
   const handleValidatePayment = async (id: number) => {
     try {
@@ -88,10 +128,17 @@ export default function ListeRdv() {
 };
 
   // Filtrage
-  const filtered = appointments.filter(rdv => 
-    rdv.patient?.nom?.toLowerCase().includes(search.toLowerCase()) ||
-    rdv.motif?.toLowerCase().includes(search.toLowerCase())
-  );
+    const filtered = appointments.filter((rdv) => {
+    const matchesSearch = 
+        rdv.patient?.nom?.toLowerCase().includes(search.toLowerCase()) ||
+        rdv.patient?.prenom?.toLowerCase().includes(search.toLowerCase());
+
+    // Logique du filtre de statut
+    const matchesStatus = 
+        statusFilter === "Tous" || rdv.statut === statusFilter;
+
+    return matchesSearch && matchesStatus;
+    });
 
   const paginated = filtered.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -137,6 +184,20 @@ export default function ListeRdv() {
                 className="bg-transparent outline-none text-white placeholder:text-white/40 w-full text-sm"
                 />
             </div>
+            <div className="flex items-center gap-2">
+                <label className="text-xs text-white/50 uppercase tracking-wider font-semibold">Statut:</label>
+                <select 
+                className="login-input !w-[160px] cursor-pointer"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                <option value="Tous">Tous</option>
+                <option value="PLANIFIE">En attente</option>
+                <option value="CONFIRME">Confirmé</option>
+                <option value="ANNULE">Annulé</option>
+                <option value="TERMINE">Terminé</option>
+                </select>
+            </div>
             <button 
                 className="refresh-btn flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 border border-white/20 hover:bg-white/20 transition disabled:opacity-50"
                 onClick={fetchRdv}
@@ -167,57 +228,77 @@ export default function ListeRdv() {
             </tr>
           </thead>
           <tbody>
-            {!loading && paginated.map((rdv) => (
-              <tr key={rdv.id}>
-                <td>
-                  <div className="flex items-center gap-3">
-                    <div className="avatar-mini"><User size={14} /></div>
-                    <span className="font-medium text-white">{rdv.patient?.nom || "Inconnu"}</span>
-                  </div>
-                </td>
-                <td>
-                    <div className="flex flex-col">
-                        {/* Utilisation de dateRdv et heureRdv (noms venant du backend) */}
-                        <span className="flex items-center gap-1 text-sm">
-                        <Calendar size={12} /> {rdv.date} 
-                        </span>
-                        <span className="flex items-center gap-1 text-xs text-white/50">
-                        <Clock size={12} /> {rdv.heure}
-                        </span>
+            {!loading && paginated.map((rdv) => {
+              // Récupération des détails du statut pour cette ligne
+              const { label, className } = getStatusDetails(rdv.statut);
+              
+              return (
+                <tr key={rdv.id}>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div className="avatar-mini"><User size={14} /></div>
+                      <span className="font-medium text-white">{rdv.patient?.nom || "Inconnu"}</span>
                     </div>
-                    </td>
-                <td><span className="truncate max-w-[150px] inline-block">{rdv.motif}</span></td>
-                <td>
-                  <span className={`status-badge ${rdv.paye ? "status-success" : "status-pending"}`}>
-                    {rdv.paye ? "Payé" : "En attente"}
-                  </span>
-                </td>
-                <td>
-                  <div className="flex items-center gap-2">
-                    <button className="action-btn edit" title="Modifier" onClick={() => handleOpenForm(rdv)}>
-                      <Pencil size={15} />
-                    </button>
-                    {!rdv.paye && (
-                      <button 
-                        className="action-btn view" 
-                        style={{ color: '#fbbf24' }}
-                        onClick={() => handleValidatePayment(rdv.id)}
-                        title="Encaisser"
-                      >
-                        <CreditCard size={15} />
+                  </td>
+                  <td>
+                    <div className="flex flex-col">
+                      <span className="flex items-center gap-1 text-sm">
+                        <Calendar size={12} /> {rdv.date} 
+                      </span>
+                      <span className="flex items-center gap-1 text-xs text-white/50">
+                        <Clock size={12} /> {rdv.heure}
+                      </span>
+                    </div>
+                  </td>
+                  <td><span className="truncate max-w-[150px] inline-block">{rdv.motif}</span></td>
+                  <td>
+                    {/* Application dynamique de la classe CSS du statut */}
+                    <span className={`status-badge ${className}`}>
+                      {label}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="flex items-center gap-2">
+                      <button className="action-btn edit" title="Modifier" onClick={() => handleOpenForm(rdv)}>
+                        <Pencil size={15} />
                       </button>
-                    )}
-                    <button 
-                      className="action-btn delete" 
-                      onClick={() => handleDelete(rdv.id)}
-                      title="Supprimer"
-                    >
-                      <Trash2 size={15} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                      
+                      {/* Bouton Encaisser (Carte bancaire) - Uniquement si En attente */}
+                      {rdv.statut === 'EN_ATTENTE' && (
+                        <button 
+                          className="action-btn view" 
+                          style={{ color: '#fbbf24' }}
+                          onClick={() => handleValidatePayment(rdv.id)}
+                          title="Encaisser"
+                        >
+                          <CreditCard size={15} />
+                        </button>
+                      )}
+
+                      {/* NOUVEAU : Bouton Annuler (Croix) - Uniquement si En attente ou Confirmé */}
+                      {(rdv.statut === 'PLANIFIE' || rdv.statut === 'CONFIRME') && (
+                        <button 
+                          className="action-btn delete" 
+                          style={{ color: '#ef4444' }} // Couleur rouge
+                          onClick={() => handleCancelRdv(rdv)}
+                          title="Annuler le rendez-vous"
+                        >
+                          <XCircle size={15} />
+                        </button>
+                      )}
+
+                      <button   
+                        className="action-btn delete" 
+                        onClick={() => handleDelete(rdv.id)}
+                        title="Supprimer définitivement"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
             {!loading && paginated.length === 0 && (
               <tr><td colSpan={5} className="text-center py-10 text-white/30">Aucun rendez-vous trouvé.</td></tr>
             )}

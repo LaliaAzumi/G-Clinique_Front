@@ -90,7 +90,8 @@ const AddRdvForm = ({ rdvToEdit, onSuccess, onCancel }: AddRdvFormProps) => {
       medecinId: Number(data.medecinId),
       date: data.date,
       heure: data.heure,
-      motif: data.motif
+      motif: data.motif,
+      statut: data.id ? data.statut : "EN_ATTENTE"
     };
     onSuccess(payload);
   };

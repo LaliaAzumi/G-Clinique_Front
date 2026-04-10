@@ -46,7 +46,17 @@ export const appointmentService = {
     throw new Error(errorData.detail || "Erreur de suppression");
   }
 },
-
+cancel: async (id: number) => {
+    const token = localStorage.getItem("token");
+    // Endpoint supposé : PATCH /api/v1/rendez-vous/{id}/cancel
+    const response = await fetch(`${API_BASE_URL}/${id}/cancel`, {
+      method: "PATCH", 
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (!response.ok) throw new Error("Erreur lors de l'annulation");
+    return response.json();
+  },
+  
   validerPaiement: async (id: number) => {
     const token = localStorage.getItem("token");
     const response = await fetch(`${API_BASE_URL}/${id}/valider-paiement`, {
