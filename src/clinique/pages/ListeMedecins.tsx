@@ -4,6 +4,7 @@ import Pagination from "../components/Pagination";
 import "./ListePage.css";
 import { medecinService } from "@/lib/api-medecins";
 import { Medecin } from "@/types/medecins";
+import { FullPageLoader } from "@/components/FullPageLoader";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -19,6 +20,7 @@ export default function ListeMedecins() {
   const [selectedMedecin, setSelectedMedecin] = useState<Medecin | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   // --- CHARGEMENT DES DONNÉES ---
   const fetchMedecins = async () => {
@@ -53,11 +55,11 @@ export default function ListeMedecins() {
   };
 
   // Pour le crayon (Modification)
-const handleEditClick = (medecin: Medecin) => {
-  setSelectedMedecin(medecin);
-  setIsEditMode(true);
-  setIsModalOpen(true);
-};
+  const handleEditClick = (medecin: Medecin) => {
+    setSelectedMedecin(medecin);
+    setIsEditMode(true);
+    setIsModalOpen(true);
+  };
 
   // --- LOGIQUE DE FILTRAGE ---
   const filtered = medecins.filter((m) => {
@@ -83,77 +85,82 @@ const handleEditClick = (medecin: Medecin) => {
     currentPage * ITEMS_PER_PAGE
   );
 
-  if (loading) return <div className="p-10">Chargement des données...</div>;
- const handleSave = async () => {
-  if (!selectedMedecin) return;
+  if (loading) return <FullPageLoader message="Chargement des médecins" />;
+  const handleSave = async () => {
+    if (!selectedMedecin) return;
+    setSaving(true);
 
-  try {
-    if (selectedMedecin.medecinId) {
-      // MODE ÉDITION (Update) - On garde l'objet tel quel car ton @PutMapping est différent
-      await medecinService.update(selectedMedecin.medecinId, selectedMedecin);
-      alert("Médecin modifié avec succès !");
-    } else {
-      // MODE CRÉATION - On restructure pour correspondre au Java
-      const dataToCreate = {
-        medecin: {
-          nom: selectedMedecin.nom,
-          specialite: selectedMedecin.specialite,
-          telephone: selectedMedecin.telephone,
-          adresse: selectedMedecin.adresse
-        },
-        username: (selectedMedecin as any).username,
-        email: (selectedMedecin as any).email
-      };
-
-      console.log("Envoi de la structure correcte :", dataToCreate);
-      
-      await medecinService.createWithUser(dataToCreate);
-      alert("Médecin et compte utilisateur créés !");
-    }
-
-    setIsModalOpen(false);
-    fetchMedecins();
-  } catch (error) {
-    console.error("Erreur save:", error);
-    alert("Une erreur est survenue lors de la création.");
-  }
-};
-const handleDeleteClick = async (id: number | string) => {
-  if (window.confirm("Voulez-vous vraiment supprimer ce médecin ?")) {
     try {
-      await medecinService.delete(id.toString());
-      alert("Médecin supprimé !");
-      fetchMedecins(); // Rafraîchit la liste automatiquement
-    } catch (error) {
-      console.error("Erreur lors de la suppression:", error);
-      alert("Erreur lors de la suppression.");
+      if (selectedMedecin.medecinId) {
+        // MODE ÉDITION (Update) - On garde l'objet tel quel car ton @PutMapping est différent
+        await medecinService.update(selectedMedecin.medecinId, selectedMedecin);
+        alert("Médecin modifié avec succès !");
+      } else {
+        // MODE CRÉATION - On restructure pour correspondre au Java
+        const dataToCreate = {
+          medecin: {
+            nom: selectedMedecin.nom,
+            specialite: selectedMedecin.specialite,
+            telephone: selectedMedecin.telephone,
+            adresse: selectedMedecin.adresse
+          },
+          username: (selectedMedecin as any).username,
+          email: (selectedMedecin as any).email
+        };
+
+        console.log("Envoi de la structure correcte :", dataToCreate);
+
+        await medecinService.createWithUser(dataToCreate);
+        alert("Médecin et compte utilisateur créés !");
+      }
+
+      setIsModalOpen(false);
+      fetchMedecins();
+    } catch (error: any) {
+      console.error("Erreur save:", error);
+      alert(error.message || "Une erreur est survenue lors de la création.");
+    } finally {
+      setSaving(false);
     }
-  }
-};
-const handleAddClick = () => {
-  setSelectedMedecin({
-    nom: "",
-    specialite: "",
-    telephone: "",
-    email: "",
-    username: "",
-    adresse: "",
-  } as any);
+  };
 
-  setIsEditMode(true);
-  setIsModalOpen(true);
-};
+  const handleDeleteClick = async (id: number | string) => {
+    if (window.confirm("Voulez-vous vraiment supprimer ce médecin ?")) {
+      try {
+        await medecinService.delete(id.toString());
+        alert("Médecin supprimé !");
+        fetchMedecins();
+      } catch (error) {
+        console.error("Erreur lors de la suppression:", error);
+        alert("Erreur lors de la suppression.");
+      }
+    }
+  };
 
-const SPECIALITES_LISTE = [
-  "Cardiologie",
-  "Dermatologie",
-  "Généraliste",
-  "Neurologie",
-  "Pédiatrie",
-  "Psychiatrie",
-  "Radiologie",
-  "Ophtalmologie"
-];
+  const handleAddClick = () => {
+    setSelectedMedecin({
+      nom: "",
+      specialite: "",
+      telephone: "",
+      email: "",
+      username: "",
+      adresse: "",
+    } as any);
+
+    setIsEditMode(true);
+    setIsModalOpen(true);
+  };
+
+  const SPECIALITES_LISTE = [
+    "Cardiologie",
+    "Dermatologie",
+    "Généraliste",
+    "Neurologie",
+    "Pédiatrie",
+    "Psychiatrie",
+    "Radiologie",
+    "Ophtalmologie"
+  ];
 
   return (
     <div className="page-container">
@@ -439,8 +446,16 @@ const SPECIALITES_LISTE = [
           Annuler
         </button>
         {isEditMode && (
-          <button className="btn-primary" onClick={handleSave}>
-            {selectedMedecin.medecinId ? "Enregistrer les modifications" : "Créer le médecin"}
+          <button
+            className="btn-primary"
+            onClick={handleSave}
+            disabled={saving}
+            style={{ display: "flex", alignItems: "center", gap: "6px", opacity: saving ? 0.7 : 1 }}
+          >
+            {saving && (
+              <span style={{ display: "inline-block", width: "14px", height: "14px", border: "2px solid #fff", borderTop: "2px solid transparent", borderRadius: "50%", animation: "spin 1s linear infinite" }}></span>
+            )}
+            {saving ? "Enregistrement..." : (selectedMedecin.medecinId ? "Enregistrer les modifications" : "Créer le médecin")}
           </button>
         )}
       </div>

@@ -68,11 +68,26 @@ createWithUser: async (data: any) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem("token")}`, // Ajustez selon votre gestion de token
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
     },
     body: JSON.stringify(data),
   });
-  if (!response.ok) throw new Error("Erreur lors de la création");
+
+  if (!response.ok) {
+    const errorText = await response.text();
+
+    // Détection des erreurs spécifiques
+    if (errorText.includes("Duplicate entry") || errorText.includes("UK6dotkott2kjsp8vw4d0m25fb7")) {
+      throw new Error("Cet email existe déjà. Veuillez utiliser un autre email.");
+    }
+
+    if (errorText.includes("Duplicate entry") && errorText.includes("username")) {
+      throw new Error("Ce nom d'utilisateur existe déjà. Veuillez en choisir un autre.");
+    }
+
+    throw new Error(errorText || "Erreur lors de la création du médecin");
+  }
+
   return response.json();
 },
   /**

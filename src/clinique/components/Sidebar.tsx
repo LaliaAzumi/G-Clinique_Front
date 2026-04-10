@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
+  BedDouble,
   Calendar,
   ClipboardList,
   CreditCard,
@@ -20,9 +21,10 @@ const navItems = [
   { to: "/app/agenda", icon: Calendar, label: "Rendez-vous", roles: ["SECRETAIRE", "MEDECIN"] },
   { to: "/app/patients", icon: Users, label: "Patients", roles: ["SECRETAIRE", "MEDECIN"] },
   
-  // Seul l'ADMIN peut voir ces deux-là
+  // Seul l'ADMIN peut voir ces trois-là
   { to: "/app/medecins", icon: Stethoscope, label: "Médecins", roles: ["ADMIN"] },
   { to: "/app/secretaires", icon: UserCog, label: "Secrétaires", roles: ["ADMIN"] },
+  { to: "/app/chambres", icon: BedDouble, label: "Chambres", roles: ["ADMIN"] },
   
   { to: "/app/consultations", icon: ClipboardList, label: "Consultations", roles: ["MEDECIN"] },
   { to: "/app/ordonnances", icon: FileText, label: "Ordonnances", roles: ["MEDECIN"] },

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, Stethoscope } from "lucide-react";
 import loginBg from "@/assets/login-bg.jpg";
-import { useAuth } from "@/context/AuthContext"; // notre context global
-import { loginRequest } from "@/services/api"; // service API centralisé
+import { useAuth } from "@/context/AuthContext";
+import { loginRequest } from "@/services/api";
+import { FullPageLoader } from "@/components/FullPageLoader";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("tsinjo");
@@ -31,6 +32,9 @@ const LoginPage = () => {
     }
   };
 
+  // Afficher le loader pendant la connexion
+  if (loading) return <FullPageLoader message="Connexion en cours" />;
+
   return (
     <div
       className="relative flex min-h-screen items-center justify-center overflow-hidden p-4"
@@ -41,7 +45,7 @@ const LoginPage = () => {
       }}
     >
       {/* Overlay sombre */}
-  <div className="absolute inset-0 bg-black/40 z-0"></div>
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
       {/* Glass login card */}
       <div className="glass-card w-full max-w-md px-8 py-10 sm:px-10">
         {/* Logo */}
@@ -99,8 +103,8 @@ const LoginPage = () => {
           </div>
 
           {/* Sign In button */}
-          <button type="submit" className="login-btn">
-            SIGN IN
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? "CONNEXION..." : "SIGN IN"}
           </button>
 
           {/* Divider 
