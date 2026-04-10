@@ -1,125 +1,58 @@
-import { Appointment, CreateAppointmentInput, UpdateAppointmentInput } from "@/types/appointment";
-
-const mockAppointments: Appointment[] = [
-  {
-    id: "1",
-    patientId: "1",
-    patientName: "Jean Dupont",
-    serviceId: "1",
-    serviceName: "Consultation Générale",
-    clinicId: "1",
-    clinicName: "Clinique Central",
-    appointmentDate: new Date().toISOString().split('T')[0],
-    appointmentTime: "09:00",
-    duration: 30,
-    status: "confirmed",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    patientId: "2",
-    patientName: "Marie Martin",
-    serviceId: "2",
-    serviceName: "Dentologie",
-    clinicId: "1",
-    clinicName: "Clinique Central",
-    appointmentDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-    appointmentTime: "14:00",
-    duration: 45,
-    status: "pending",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
-
-let appointments = [...mockAppointments];
+// lib/api-appointments.ts
+const API_BASE_URL = "http://localhost:8000/api/v1/rendez-vous";
 
 export const appointmentService = {
-  async getAll(): Promise<Appointment[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(appointments), 300);
+  getAll: async () => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE_URL}/list`, {
+      headers: { "Authorization": `Bearer ${token}` }
     });
+    if (!response.ok) throw new Error("Erreur lors de la récupération");
+    return response.json();
   },
 
-  async getById(id: string): Promise<Appointment | null> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(appointments.find((a) => a.id === id) || null);
-      }, 200);
+  save: async (data: any) => {
+    const token = localStorage.getItem("token");
+    
+    // Détection : si data.id existe, c'est une modification
+    const isUpdate = data.id && data.id !== "";
+    const url = isUpdate ? `${API_BASE_URL}/${data.id}` : `${API_BASE_URL}/save`;
+    const method = isUpdate ? "PUT" : "POST";
+
+    const response = await fetch(url, {
+      method: method,
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify(data),
     });
+    
+    if (!response.ok) throw new Error("Erreur lors de l'enregistrement");
+    return response.json();
   },
 
-  async getByClinicId(clinicId: string): Promise<Appointment[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(appointments.filter((a) => a.clinicId === clinicId));
-      }, 200);
-    });
-  },
+  delete: async (id: number) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${API_BASE_URL}/${id}`, {
+    method: "DELETE",
+    headers: { 
+      "Authorization": `Bearer ${token}` 
+    }
+  });
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.detail || "Erreur de suppression");
+  }
+},
 
-  async getByPatientId(patientId: string): Promise<Appointment[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(appointments.filter((a) => a.patientId === patientId));
-      }, 200);
+  validerPaiement: async (id: number) => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE_URL}/${id}/valider-paiement`, {
+      method: "PATCH",
+      headers: { "Authorization": `Bearer ${token}` }
     });
-  },
-
-  async getByDateRange(startDate: string, endDate: string): Promise<Appointment[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const filtered = appointments.filter(
-          (a) => a.appointmentDate >= startDate && a.appointmentDate <= endDate
-        );
-        resolve(filtered);
-      }, 200);
-    });
-  },
-
-  async create(data: CreateAppointmentInput): Promise<Appointment> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const newAppointment: Appointment = {
-          id: Date.now().toString(),
-          ...data,
-          patientName: data.patientId,
-          serviceName: data.serviceId,
-          clinicName: data.clinicId,
-          duration: 30,
-          status: "pending",
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-        appointments.push(newAppointment);
-        resolve(newAppointment);
-      }, 300);
-    });
-  },
-
-  async update(data: UpdateAppointmentInput): Promise<Appointment> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const index = appointments.findIndex((a) => a.id === data.id);
-        if (index !== -1) {
-          appointments[index] = {
-            ...appointments[index],
-            ...data,
-            updatedAt: new Date().toISOString(),
-          };
-          resolve(appointments[index]);
-        }
-        resolve(appointments[index]);
-      }, 300);
-    });
-  },
-
-  async delete(id: string): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        appointments = appointments.filter((a) => a.id !== id);
-        resolve();
-      }, 200);
-    });
-  },
+    return response.json();
+  }
 };
