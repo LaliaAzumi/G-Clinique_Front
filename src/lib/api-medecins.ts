@@ -30,7 +30,7 @@
 import { Medecin } from "@/types/medecins";
 
 // L'URL de ton backend FastAPI pour les médecins
-const API_URL = "http://localhost:8080/api/v1/medecins";
+const API_URL = "http://localhost:9090/api/v1/medecins";
 
 export const medecinService = {
   /**

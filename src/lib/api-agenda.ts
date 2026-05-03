@@ -1,6 +1,6 @@
 import { Agenda } from "@/types/agenda";
 
-const API_URL = "http://localhost:8080/api/v1/calendar";
+const API_URL = "http://localhost:8000/api/v1/calendar";
 
 export const agendaService = {
   /**
