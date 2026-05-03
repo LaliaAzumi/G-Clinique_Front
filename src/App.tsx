@@ -14,6 +14,8 @@ import PlaceholderPage from "./clinique/pages/PlaceholderPage";
 import AgendaMedecins from "./clinique/pages/AgendaMedecins.tsx";
 import FullProject from "./pages/FullProject.tsx";
 
+import ConsultationPage from "./clinique/pages/ConsultationPage"; 
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -40,6 +42,7 @@ const App = () => (
             <Route path="ordonnances" element={<PlaceholderPage title="Ordonnances" />} />
             <Route path="paiements" element={<PlaceholderPage title="Paiements" />} />
             <Route path="agenda" element={<AgendaMedecins/>} />
+            <Route path="consultation/:id" element={<ConsultationPage />} />
 
 
 

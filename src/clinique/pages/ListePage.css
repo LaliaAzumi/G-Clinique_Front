@@ -303,3 +303,44 @@
 .clinique-scope .text-muted {
   color: var(--text-muted);
 }
+.status-legend {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid #f1f1f1;
+  flex-wrap: wrap;
+  /* background: #fafafa; */
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #e6e6e6;
+  font-weight: 500;
+}
+
+.legend-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.legend-color.success {
+  background: #1fb468;
+}
+
+.legend-color.warning {
+  background: #fcc419;
+}
+
+.legend-color.danger {
+  background: #f03e3e;
+}
+
+.legend-color.info {
+  background: #228be6;
+}

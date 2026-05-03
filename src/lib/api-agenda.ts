@@ -2,6 +2,8 @@ import { Agenda } from "@/types/agenda";
 
 const API_URL = "http://localhost:8000/api/v1/calendar";
 
+
+
 export const agendaService = {
   /**
    * Récupère les événements (RDV)
@@ -9,10 +11,11 @@ export const agendaService = {
   getEvents: async (startDate?: string): Promise<Agenda[]> => {
     try {
       const token = localStorage.getItem("token");
-      // const userId = localStorage.getItem("userId");
+      // const userId = localStorage.getItem("userId"); tsy izy
       const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const userId = user.id; // Assure-toi que c'est le bon champ (id
-
+      const userId = user.id; 
+      console.log("USER ID =", user); // Debug : vérifier que l'ID est bien récupéré
+      console.log("token =", token); // Debug : vérifier que le token est bien récupéré
       // 🔍 sécurité minimale
       if (!token) throw new Error("Token manquant");
       if (!userId) throw new Error("UserId manquant");
@@ -23,8 +26,8 @@ export const agendaService = {
 
       const url = `${API_URL}/eventsN/${userId}?${params.toString()}`;
 
-      console.log("URL =", url);
-      console.log("TOKEN =", token);
+      //console.log("URL =", url);
+      //console.log("TOKEN =", token); efa nety hehe
 
       const response = await fetch(url, {
         method: "GET",
