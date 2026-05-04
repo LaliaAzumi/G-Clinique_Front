@@ -344,3 +344,27 @@
 .legend-color.info {
   background: #228be6;
 }
+
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.table-container {
+  flex: 1; /* 🔥 prend tout l’espace restant */
+  display: flex;
+  flex-direction: column;
+}
+.custom-table {
+  width: 100%;
+  flex: 1; /* 🔥 pousse vers le bas */
+}
+.table-container th, td {
+    text-align: left;
+    padding: 10px 16px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    white-space: nowrap;
+}
