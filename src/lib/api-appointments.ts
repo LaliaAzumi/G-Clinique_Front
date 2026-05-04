@@ -84,5 +84,19 @@ cancel: async (id: number) => {
       headers: { "Authorization": `Bearer ${token}` }
     });
     return response.json();
-  }
+  },
+  annuler: async (id: string) => {
+      const token = localStorage.getItem("token");
+
+    const res = await fetch(`${API_BASE_URL}/${id}/annuler`, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+
+    if (!res.ok) {
+      throw new Error("Erreur annulation");
+    }
+
+    return res.json();
+  },
 };
