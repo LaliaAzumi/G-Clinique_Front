@@ -48,8 +48,8 @@ export default function Paiements() {
     setLoading(true);
     setError(null);
     try {
-      const data = await appointmentService.getAll(); 
-      console.log(data);
+      const data = await appointmentService.getRdvPaiements(); 
+      console.log("Données RDV récupérées:", data); // Debug des données
       setAppointments(Array.isArray(data) ? data : []);
     } catch (err: any) {
       setError("Erreur de récupération des données");
@@ -238,7 +238,10 @@ const handleFormSubmit = async (data: any) => {
               <th>Patient</th>
               <th>Date & Heure</th>
               <th>Motif</th>
-              <th>Statut</th>
+              {/* <th>Statut</th> */}
+              <th>Code de transaction</th>
+              <th>Montant Envoyer</th>
+              <th>nom Expediteur</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -273,12 +276,15 @@ const handleFormSubmit = async (data: any) => {
                       {rdv.motif}
                     </span>
                   </td> 
-                  <td>
-                    {/* Application dynamique de la classe CSS du statut */}
+                  {/*<td>
+                     Application dynamique de la classe CSS du statut 
                     <span className={`status-badge ${className}`}>
                       {label}
                     </span>
-                  </td>
+                  </td>*/}
+                  <td>{rdv.paiement?.codeTransaction || "N/A"}</td>
+                    <td>{rdv.paiement?.montantEnvoye ? `${rdv.paiement.montantEnvoye} €` : "N/A"}</td>
+                    <td>{rdv.paiement?.nomExpediteur || "N/A"}</td>
                   <td>
                     <div className="flex items-center gap-2">
                       {/* <button className="action-btn edit" title="Modifier" onClick={() => handleOpenForm(rdv)}>
@@ -309,13 +315,13 @@ const handleFormSubmit = async (data: any) => {
                         </button>
                       )}
 
-                      <button   
+                     {/* <button   
                         className="action-btn delete" 
                         onClick={() => handleDelete(rdv.id)}
                         title="Annuler définitivement"
                       >
-                        {/* <Trash2 size={15} /> */}
-                      </button>
+                         <Trash2 size={15} />
+                      </button> */}
                     </div>
                   </td>
                 </tr>

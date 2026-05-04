@@ -65,8 +65,9 @@ export const appointmentService = {
     const errorData = await response.json().catch(() => ({}));
     throw new Error(errorData.detail || "Erreur de suppression");
   }
-},
-cancel: async (id: number) => {
+  },
+
+  cancel: async (id: number) => {
     const token = localStorage.getItem("token");
     // Endpoint supposé : PATCH /api/v1/rendez-vous/{id}/cancel
     const response = await fetch(`${API_BASE_URL}/${id}/cancel`, {
@@ -85,6 +86,7 @@ cancel: async (id: number) => {
     });
     return response.json();
   },
+
   annuler: async (id: string) => {
       const token = localStorage.getItem("token");
 
@@ -99,4 +101,20 @@ cancel: async (id: number) => {
 
     return res.json();
   },
+
+  getRdvPaiements: async () => {
+    const token = localStorage.getItem("token");
+    // console.log("TOKEN =", token);
+
+    const res = await fetch(`${API_BASE_URL}/rdv-paiements`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) throw new Error("Erreur chargement RDV paiements");
+
+    return res.json();
+  },
+
 };

@@ -308,7 +308,7 @@ const handleFormSubmit = async (data: any) => {
                       )}
 
                       {/* NOUVEAU : Bouton Annuler (Croix) - Uniquement si En attente ou Confirmé */}
-                      {(rdv.statut === 'PLANIFIE' || rdv.statut === 'CONFIRME') && (
+                      {(rdv.statut === 'PLANIFIE' || rdv.statut === 'EN_ATTENTE') && (
                         <button 
                           className="action-btn delete" 
                           style={{ color: '#ef4444' }} // Couleur rouge
