@@ -226,6 +226,116 @@ const SPECIALITES_LISTE = [
           border-color: #007bff;
           box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
         }
+          .custom-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  backdrop-filter: blur(3px);
+}
+
+.custom-modal {
+  width: 420px;
+  background: #ffffff2d;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  animation: modalShow 0.2s ease;
+}
+
+@keyframes modalShow {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+}
+
+.custom-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.custom-modal-header h2 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.modal-close-btn {
+  border: none;
+  background: transparent;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.custom-modal-body {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 0 10px;
+  outline: none;
+  transition: 0.2s;
+  background: #ffffff18;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #227c70;
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+}
+
+.custom-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 18px 20px;
+  border-top: 1px solid #eee;
+}
+
+.btn-secondary {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #eeeeee4b;
+  cursor: pointer;
+}
+
+.btn-primary {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #46e5d82a;
+  color: white;
+  cursor: pointer;
+}
       `}</style>
 
       <div className="page-header">
@@ -311,140 +421,146 @@ const SPECIALITES_LISTE = [
         />
       </div>
 
-      {/* AFFICHAGE CONDITIONNEL DE LA MODALE */}
+      {
+      
+      /* AFFICHAGE CONDITIONNEL DE LA MODALE */}
+{/* CREATE / EDIT MODAL MÉDECIN */}
 {isModalOpen && selectedMedecin && (
-  <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-      
-      {/* HEADER : Titre dynamique */}
-      <div className="modal-header">
-        <h2>
-          {selectedMedecin.medecinId 
-            ? `Modifier le Médecin : ${selectedMedecin.nom}` 
-            : "Ajouter un nouveau Médecin"}
-        </h2>
-        <button className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</button>
-      </div>
-
-      {/* BODY : Formulaire ou Consultation */}
-      <div className="modal-body">
-        
-        {/* ID : Affiché uniquement en modification */}
-        {selectedMedecin.medecinId && (
-          <div className="info-row">
-            <strong>ID</strong>
-            <span>{selectedMedecin.medecinId}</span>
-          </div>
-        )}
-
-        {/* NOM */}
-        <div className="info-row">
-          <strong>Nom</strong>
-          {isEditMode ? (
-            <input 
-              className="modal-input"
-              value={selectedMedecin.nom || ""} 
-              onChange={(e) => setSelectedMedecin({...selectedMedecin, nom: e.target.value})}
-            />
-          ) : (
-            <span>{selectedMedecin.nom}</span>
-          )}
-        </div>
-
-      
-
-        {/* SPÉCIALITÉ */}
-        <div className="info-row">
-  <strong>Spécialité</strong>
-  {isEditMode ? (
-    <select 
-      className="modal-input"
-      value={selectedMedecin.specialite || ""} 
-      onChange={(e) => setSelectedMedecin({...selectedMedecin, specialite: e.target.value})}
+  <div
+    className="custom-modal-overlay"
+    onClick={() => setIsModalOpen(false)}
+  >
+    <div
+      className="custom-modal"
+      onClick={(e) => e.stopPropagation()}
     >
-      <option value="" disabled>Choisir une spécialité</option>
-      {SPECIALITES_LISTE.map((spec) => (
-        <option key={spec} value={spec}>
-          {spec}
-        </option>
-      ))}
-    </select>
-  ) : (
-    <span>{selectedMedecin.specialite}</span>
-  )}
-</div>
+      {/* HEADER */}
+      <div className="custom-modal-header">
+        <h2>
+          {selectedMedecin.medecinId
+            ? "Modifier un médecin"
+            : "Ajouter un médecin"}
+        </h2>
 
-        {/* TÉLÉPHONE */}
-        <div className="info-row">
-          <strong>Téléphone</strong>
-          {isEditMode ? (
-            <input 
-              className="modal-input"
-              value={selectedMedecin.telephone || ""} 
-              onChange={(e) => setSelectedMedecin({...selectedMedecin, telephone: e.target.value})}
-            />
-          ) : (
-            <span>{selectedMedecin.telephone}</span>
-          )}
+        <button
+          className="modal-close-btn"
+          onClick={() => setIsModalOpen(false)}
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* BODY */}
+      <div className="custom-modal-body">
+
+        <div className="form-group">
+          <label>Nom</label>
+          <input
+            value={selectedMedecin.nom || ""}
+            onChange={(e) =>
+              setSelectedMedecin({
+                ...selectedMedecin,
+                nom: e.target.value,
+              })
+            }
+            placeholder="Nom du médecin"
+          />
         </div>
 
-        {/* EMAIL (Sert aussi pour la création du compte utilisateur) */}
-        <div className="info-row">
-          <strong>Email</strong>
-          {isEditMode ? (
-            <input 
-              className="modal-input"
-              type="email"
-              value={selectedMedecin.email || ""} 
-              onChange={(e) => setSelectedMedecin({...selectedMedecin, email: e.target.value})}
-            />
-          ) : (
-            <span>{selectedMedecin.email || "Non défini"}</span>
-          )}
+        <div className="form-group">
+          <label>Spécialité</label>
+          <select
+            value={selectedMedecin.specialite || ""}
+            onChange={(e) =>
+              setSelectedMedecin({
+                ...selectedMedecin,
+                specialite: e.target.value,
+              })
+            }
+            style={{background:"#00a8846c", color:"#ffffff"}}
+          >
+            <option value="">Choisir...</option>
+            {SPECIALITES_LISTE.map((s) => (
+              <option key={s} value={s}
+              style={{background:"#00a884", color:"#ffffff"}}
+              >
+                {s}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* NOM D'UTILISATEUR (Pour le compte lié) */}
-        <div className="info-row">
-          <strong>Utilisateur</strong>
-          {isEditMode ? (
-            <input 
-              className="modal-input"
-              placeholder="Nom de connexion"
-              value={(selectedMedecin as any).username || ""} 
-              onChange={(e) => setSelectedMedecin({...selectedMedecin, username: e.target.value})}
-            />
-          ) : (
-            <span>{(selectedMedecin as any).username || "N/A"}</span>
-          )}
+        <div className="form-group">
+          <label>Téléphone</label>
+          <input
+            value={selectedMedecin.telephone || ""}
+            onChange={(e) =>
+              setSelectedMedecin({
+                ...selectedMedecin,
+                telephone: e.target.value,
+              })
+            }
+            placeholder="Téléphone"
+          />
         </div>
 
-        {/* ADRESSE */}
-        <div className="info-row">
-          <strong>Adresse</strong>
-          {isEditMode ? (
-            <input 
-              className="modal-input"
-              value={selectedMedecin.adresse || ""} 
-              onChange={(e) => setSelectedMedecin({...selectedMedecin, adresse: e.target.value})}
-            />
-          ) : (
-            <span>{selectedMedecin.adresse || "Non renseignée"}</span>
-          )}
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            value={(selectedMedecin as any).email || ""}
+            onChange={(e) =>
+              setSelectedMedecin({
+                ...selectedMedecin,
+                email: e.target.value,
+              })
+            }
+            placeholder="Email"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Username</label>
+          <input
+            value={(selectedMedecin as any).username || ""}
+            onChange={(e) =>
+              setSelectedMedecin({
+                ...selectedMedecin,
+                username: e.target.value,
+              })
+            }
+            placeholder="Nom utilisateur"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Adresse</label>
+          <input
+            value={selectedMedecin.adresse || ""}
+            onChange={(e) =>
+              setSelectedMedecin({
+                ...selectedMedecin,
+                adresse: e.target.value,
+              })
+            }
+            placeholder="Adresse"
+          />
         </div>
       </div>
 
-      {/* FOOTER : Actions */}
-      <div className="modal-footer">
-        <button className="btn-close-modal" onClick={() => setIsModalOpen(false)}>
+      {/* FOOTER */}
+      <div className="custom-modal-footer">
+        <button
+          className="btn-secondary"
+          onClick={() => setIsModalOpen(false)}
+        >
           Annuler
         </button>
-        {isEditMode && (
-          <button className="btn-primary" onClick={handleSave}>
-            {selectedMedecin.medecinId ? "Enregistrer les modifications" : "Créer le médecin"}
-          </button>
-        )}
-      </div>
 
+        <button className="btn-primary" onClick={handleSave}>
+          {selectedMedecin.medecinId ? "Modifier" : "Créer"}
+        </button>
+      </div>
     </div>
   </div>
 )}
