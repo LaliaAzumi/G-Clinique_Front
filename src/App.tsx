@@ -17,6 +17,7 @@ import FullProject from "./pages/FullProject.tsx";
 
 import ConsultationPage from "./clinique/pages/ConsultationPage"; 
 import ChambresPage from "./pages/ChambresPage.tsx";
+import ListeMedicaments from "./clinique/pages/ListeMedicaments.tsx";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,8 @@ const App = () => (
           <Route path="/secretaires" element={<Navigate to="/app/secretaires" replace />} />
           <Route path="/FullProject" element={<FullProject />} />
           <Route path="/rendez-vousSec" element={<Navigate to="/app/rendez-vousSec" replace />} />
+          <Route path="/medoc" element={<Navigate to="/app/medoc" replace />} />
+
           <Route path="/chambre" element={<Navigate to="/app/chambre" replace />} />
           
           <Route path="/app" element={<CliniqueAppLayout />}>
@@ -45,7 +48,7 @@ const App = () => (
             <Route path="rendez-vous" element={<PlaceholderPage title="Rendez-vous" />} />
             <Route path="rendez-vousSec" element={<ListeRdv />} />
             <Route path="chambre" element={<ChambresPage />} />
-
+            <Route path="medoc" element={<ListeMedicaments />} />
             <Route path="consultations" element={<PlaceholderPage title="Consultations" />} />
             <Route path="ordonnances" element={<PlaceholderPage title="Ordonnances" />} />
             <Route path="paiements" element={<PlaceholderPage title="Paiements" />} />

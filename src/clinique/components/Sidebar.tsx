@@ -11,7 +11,8 @@ import {
   Stethoscope,
   UserCog,
   Users,
-  Bed
+  Bed,
+  Pill
 } from "lucide-react";
 import "./Sidebar.css";
 
@@ -20,6 +21,7 @@ const navItems = [
   { to: "/app/dashboard", icon: LayoutDashboard, label: "Dashboard", roles: ["SECRETAIRE", "MEDECIN"] },
   { to: "/app/agenda", icon: Calendar, label: "Rendez-vous", roles: ["MEDECIN"] },
   { to: "/app/rendez-vousSec", icon: Calendar, label: "Rendez-vousSec", roles: ["SECRETAIRE"] },
+  { to: "/app/medoc", icon: Pill, label: "Médicaments", roles: ["SECRETAIRE"] },
   { to: "/app/chambre", icon: Bed, label: "Chambre", roles: ["ADMIN"] },
   { to: "/app/patients", icon: Users, label: "Patients", roles: ["SECRETAIRE", "MEDECIN"] },
   
