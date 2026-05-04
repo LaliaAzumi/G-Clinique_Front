@@ -1,10 +1,10 @@
 export interface Patient {
-  id: string;
-  firstName: string;
-  lastName: string;
+  id: number;
+  nom: string;
+  prenom: string;
+  dateNaissance: string;
+  telephone: string;
   email: string;
-  phone: string;
-  dateOfBirth: string;
-  gender: "M" | "F";
-  lastVisit: string;
+  adresse?: string;
+  sexe?: string; // "M", "F", ou null
 }
