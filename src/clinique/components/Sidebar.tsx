@@ -11,6 +11,7 @@ import {
   Stethoscope,
   UserCog,
   Users,
+  Bed
 } from "lucide-react";
 import "./Sidebar.css";
 
@@ -19,6 +20,7 @@ const navItems = [
   { to: "/app/dashboard", icon: LayoutDashboard, label: "Dashboard", roles: ["SECRETAIRE", "MEDECIN"] },
   { to: "/app/agenda", icon: Calendar, label: "Rendez-vous", roles: ["MEDECIN"] },
   { to: "/app/rendez-vousSec", icon: Calendar, label: "Rendez-vousSec", roles: ["SECRETAIRE"] },
+  { to: "/app/chambre", icon: Bed, label: "Chambre", roles: ["ADMIN"] },
   { to: "/app/patients", icon: Users, label: "Patients", roles: ["SECRETAIRE", "MEDECIN"] },
   
   // Seul l'ADMIN peut voir ces deux-là
