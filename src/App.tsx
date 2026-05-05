@@ -19,6 +19,7 @@ import ConsultationPage from "./clinique/pages/ConsultationPage";
 import ChambresPage from "./pages/ChambresPage.tsx";
 import ListeMedicaments from "./clinique/pages/ListeMedicaments.tsx";
 import Paiements from "./clinique/pages/Paiements.tsx";
+import ListeConsultations from "./clinique/pages/ListeConsultation.tsx";
 
 const queryClient = new QueryClient();
 
@@ -52,7 +53,7 @@ const App = () => (
             <Route path="rendez-vousSec" element={<ListeRdv />} />
             <Route path="chambre" element={<ChambresPage />} />
             <Route path="medoc" element={<ListeMedicaments />} />
-            <Route path="consultations" element={<PlaceholderPage title="Consultations" />} />
+            <Route path="consultations" element={<ListeConsultations />} />
             <Route path="ordonnances" element={<PlaceholderPage title="Ordonnances" />} />
             <Route path="paiements" element={<Paiements />} />
             <Route path="agenda" element={<AgendaMedecins/>} />
