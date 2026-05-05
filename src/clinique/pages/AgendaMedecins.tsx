@@ -10,7 +10,10 @@ import {
   Loader2
 } from "lucide-react";
 import { agendaService } from "@/lib/api-agenda";
+// import { agendaService } from "@/lib/api-agenda";
+import { appointmentService } from "@/lib/api-appointments";
 import "./ListePage.css";
+import { toast } from '@/components/ui/use-toast';
 
 export default function AgendaMedecins() {
   // --- ÉTATS ---
@@ -90,6 +93,8 @@ useEffect(() => {
     const styles: any = {
       TERMINE: "bg-success-light text-success",
       EN_ATTENTE: "bg-warning-light text-warning",
+      // 🔥 ajouté ici
+      EN_ATTENTE_REPORTER: "bg-reporter-light text-reporter",
       ANNULE: "bg-danger-light text-danger",
       URGENT: "bg-danger-light text-danger",
     };
@@ -116,6 +121,18 @@ const handleStartRdv = (rdv: any) => {
   navigate(`/app/consultation/${rdv.id}`, { 
     state: { rdvData: rdv } 
   }); 
+};
+
+const handleReporterRdv = async (rdv: any) => {
+  try {
+    await appointmentService.reporter(rdv.id);
+
+    console.log("RDV en attente de report");
+    await fetchAgenda(); // 🔥 refresh propre depuis API
+    // refresh ou update state
+  } catch (e) {
+    console.error(e.message);
+  }
 };
 
   return (
@@ -194,6 +211,10 @@ const handleStartRdv = (rdv: any) => {
             <span className="legend-color info"></span>
             <span>En Attente de validation</span>
           </div>
+          <div className="legend-item">
+            <span className="legend-color warning-reporter"></span>
+            <span>En attente de report</span>
+          </div>
         </div>
 
         {/* TABLE */}
@@ -235,6 +256,7 @@ const handleStartRdv = (rdv: any) => {
                             <div className="rv-motif">
                               {rv.motif}
                             </div>
+                            {rv.date}
                           </div>
                         )}
                       </td>
@@ -250,6 +272,7 @@ const handleStartRdv = (rdv: any) => {
     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
       <div className="modal-header">
         <h2>Détails du Rendez-vous</h2>
+        {selectedRdv.date}
         <button className="close-btn" onClick={() => setShowModal(false)}>&times;</button>
       </div>
       <div className="modal-body">
@@ -283,14 +306,25 @@ const handleStartRdv = (rdv: any) => {
       </div>
       <div className="modal-footer">
         {selectedRdv.statut === "EN_ATTENTE" && selectedRdv.statutPaiement === "PAYE" && (
-          <button 
-            className="btn-primary" 
-            onClick={() => handleStartRdv(selectedRdv)}
-            style={{ backgroundColor: '#1fb468', borderColor: '#1fb468' }} // Couleur verte pour l'action
-          >
-            Commencer la consultation
-          </button>
+          <>
+            <button 
+              className="btn-primary" 
+              onClick={() => handleStartRdv(selectedRdv)}
+              style={{ backgroundColor: '#1fb468', borderColor: '#1fb468' }} // Couleur verte pour l'action
+              >
+              Commencer la consultation
+            </button> 
+            <button 
+              className="btn btn-warning"
+              onClick={() => handleReporterRdv(selectedRdv)}
+              disabled={!selectedRdv}
+            >
+              Reporter le RDV
+            </button>
+<br/>
+          </>
         )}
+        
         <button className="btn-secondary" onClick={() => setShowModal(false)}>Fermer</button>
       </div>
     </div>

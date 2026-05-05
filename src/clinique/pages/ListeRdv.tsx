@@ -138,7 +138,7 @@ const handleFormSubmit = async (data: any) => {
       date: data.date,
       heure: data.heure,
       motif: data.motif,
-      statut: selectedRdv ? data.statut : "EN_ATTENTE"
+      statut: data.statut ?? (selectedRdv?.statut === "EN_ATTENTE_REPORTER" ? "EN_ATTENTE" : selectedRdv?.statut) ?? "EN_ATTENTE"
     };
     console.log("Données à envoyer au service API:", payload);
 

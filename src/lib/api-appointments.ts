@@ -129,4 +129,22 @@ export const appointmentService = {
     return response.json();
   },
 
+  // medecin reporter rdv
+  reporter: async (id: number) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_BASE_URL}/rdv/${id}/reporter`, {
+      method: "PUT",
+      headers: { 
+        "Authorization": `Bearer ${token}` 
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Erreur lors du report du RDV");
+    }
+
+    return response.json();
+  },
+
 };

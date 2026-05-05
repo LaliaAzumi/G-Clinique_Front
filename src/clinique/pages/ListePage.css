@@ -368,3 +368,38 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
     white-space: nowrap;
 }
+.legend-color.warning-reporter {
+  background-color: #f472b571;
+}
+.bg-reporter-light {
+  background-color: #f472b571; /* rose */
+  color: #ffffff;
+}
+.rv-card {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  border-left: 4px solid currentColor;
+
+  /* 🔥 important */
+  overflow: hidden;
+  word-break: break-word;
+}
+.patient-name {
+  display: block;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.2;
+}
+.rv-motif {
+  white-space: normal;
+  word-break: break-word;
+
+  /* optionnel pour limiter hauteur */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* max 2 lignes */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

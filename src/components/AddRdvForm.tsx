@@ -82,21 +82,39 @@ const AddRdvForm = ({ rdvToEdit, onSuccess, onCancel }: AddRdvFormProps) => {
     m.specialite?.toLowerCase().includes(searchMedecin.toLowerCase())
   );
 
-  const handleInternalSubmit = (data: any) => {
-    console.log("Données envoyées au service API:", data);
-    const payload = {
-      ...(rdvToEdit?.id && { id: Number(rdvToEdit.id) }),
-      patientId: Number(data.patientId),
-      medecinId: Number(data.medecinId),
-      date: data.date,
-      heure: data.heure,
-      motif: data.motif,
-      // statut: data.id ? data.statut : "EN_ATTENTE"
-      statut: rdvToEdit ? data.statut : "EN_ATTENTE"
-    };
-    onSuccess(payload);
+  // const handleInternalSubmit = (data: any) => {
+  //   console.log("Données envoyées au service API:", data);
+  //   const payload = {
+  //     ...(rdvToEdit?.id && { id: Number(rdvToEdit.id) }),
+  //     patientId: Number(data.patientId),
+  //     medecinId: Number(data.medecinId),
+  //     date: data.date,
+  //     heure: data.heure,
+  //     motif: data.motif,
+  //     // statut: data.id ? data.statut : "EN_ATTENTE"
+  //     statut: rdvToEdit ? data.statut : "EN_ATTENTE"
+  //   };
+  //   onSuccess(payload);
+  // };
+const handleInternalSubmit = (data: any) => {
+  console.log("Données envoyées au service API:", data);
+
+  const normalizedStatut = rdvToEdit
+    ? (rdvToEdit.statut === "EN_ATTENTE_REPORTER" ? "EN_ATTENTE" : rdvToEdit.statut)
+    : "EN_ATTENTE";
+
+  const payload = {
+    ...(rdvToEdit?.id && { id: Number(rdvToEdit.id) }),
+    patientId: Number(data.patientId),
+    medecinId: Number(data.medecinId),
+    date: data.date,
+    heure: data.heure,
+    motif: data.motif,
+    statut: normalizedStatut,
   };
 
+  onSuccess(payload);
+};
   const isEdit = !!rdvToEdit;
 
   return (
