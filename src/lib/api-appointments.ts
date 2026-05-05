@@ -12,6 +12,16 @@ export const appointmentService = {
     return response.json();
   },
 
+  getById: async (id: number) => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (!response.ok) throw new Error("Erreur lors de la récupération du rendez-vous");
+    const data = await response.json();
+    return data && data.success ? data.data : data;
+  },
+
   save: async (data: any) => {
     const token = localStorage.getItem("token");
     
@@ -101,6 +111,62 @@ export const appointmentService = {
 
     return res.json();
   },
+
+    // updatePrestations: async (id: number, prestations: any[], newActeIds: number[] = []) => {
+    //   const token = localStorage.getItem("token");
+    //   const response = await fetch(`${API_BASE_URL}/${id}/prestations`, {
+    //     method: "PUT",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "Authorization": `Bearer ${token}`
+    //     },
+    //     body: JSON.stringify({ prestations, newActeIds }),
+    //   });
+    //   if (!response.ok) {
+    //     throw new Error("Erreur lors de la mise à jour des prestations");
+    //   }
+    //   return response.json();
+    // },
+    // Dans ton fichier de services
+// updatePrestations: async (id: number, prestations: any[], newActeIds: number[] = [], vitals: any = null) => {
+//     const token = localStorage.getItem("token");
+//     const response = await fetch(`${API_BASE_URL}/${id}/prestations`, {
+//         method: "PUT",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "Authorization": `Bearer ${token}`
+//         },
+//         // On ajoute vitals dans le body
+//         body: JSON.stringify({ prestations, newActeIds, vitals }), 
+//     });
+    
+//     if (!response.ok) {
+//         throw new Error("Erreur lors de la mise à jour des prestations et de la consultation");
+//     }
+//     return response.json();
+// },
+// Exemple de modification dans api-appointments.ts
+updatePrestations: async (id: number, prestations: any[], newActeIds: number[], vitals: any, prescriptions: any[]) => {
+    const token = localStorage.getItem("token");
+    const payload = {
+        prestations: prestations,
+        newActeIds: newActeIds,
+        vitals: vitals,
+        prescriptions: prescriptions // On envoie les médicaments ici
+    };
+
+    const response = await fetch(`${API_BASE_URL}/${id}/prestations`, {
+        method: 'PUT',
+        headers: { 
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) throw new Error("Erreur lors de la mise à jour");
+    return response.json();
+},
 
   getRdvPaiements: async () => {
     const token = localStorage.getItem("token");
