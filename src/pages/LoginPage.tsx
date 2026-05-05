@@ -5,8 +5,8 @@ import { useAuth } from "@/context/AuthContext"; // notre context global
 import { loginRequest } from "@/services/api"; // service API centralisé
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("juju");
-  const [password, setPassword] = useState("juju");
+  const [username, setUsername] = useState("tsinjo");
+  const [password, setPassword] = useState("tsinjo");
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth(); // accès au context pour stocker token + user
   const [loading, setLoading] = useState(false);

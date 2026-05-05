@@ -39,6 +39,8 @@ export default function ListeRdv() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("Tous"); // Nouveau state
+  const [statusFilterPaiement, setStatusFilterPaiement] = useState("Tous"); // Nouveau state
+
   
   // États pour la gestion du formulaire (Modal)
   const [showForm, setShowForm] = useState(false);
@@ -88,7 +90,8 @@ const handleCancelRdv = async (rdv: any) => {
       date: rdv.date,
       heure: rdv.heure,
       motif: rdv.motif,
-      statut: "ANNULE" // La valeur clé
+      statut: "ANNULE", // La valeur clé
+      
     };
     
     try {
@@ -160,7 +163,11 @@ const handleFormSubmit = async (data: any) => {
     const matchesStatus = 
         statusFilter === "Tous" || rdv.statut === statusFilter;
 
-    return matchesSearch && matchesStatus;
+    // Logique du filtre de statut de paiement
+    const matchesStatusPaiement = 
+        statusFilterPaiement === "Tous" || rdv.statutPaiement === statusFilterPaiement;
+
+    return matchesSearch && matchesStatus && matchesStatusPaiement;
     });
 
   const paginated = filtered.slice(
@@ -216,13 +223,28 @@ const handleFormSubmit = async (data: any) => {
                 >
                 <option value="Tous">Tous</option>
                 <option value="EN_ATTENTE">En attente</option>
-                <option value="EN_ATTENTE_VALIDATION">En attente validation</option>
+                {/* <option value="EN_ATTENTE_VALIDATION">En attente validation</option> */}
                 <option value="ANNULE">Annulé</option>
                 <option value="TERMINE">Terminé</option>
                 <option value="EN_ATTENTE_REPORTER">En attente de report</option>
 
                 </select>
             </div>
+            <div className="flex items-center gap-2">
+                <label className="text-xs text-white/50 uppercase tracking-wider font-semibold">Statut:</label>
+                <select 
+                className="login-input !w-[160px] cursor-pointer"
+                value={statusFilterPaiement}
+                onChange={(e) => setStatusFilterPaiement(e.target.value)}
+                >
+                <option value="Tous">Tous</option>
+                <option value="PAYE">PAYE</option>
+                {/* <option value="EN_ATTENTE_VALIDATION">En attente validation</option> */}
+                <option value="EN_ATTENTE_PAIEMENT">EN_ATTENTE_PAIEMENT</option>
+                <option value="REFUSE">REFUSE</option>
+                </select>
+            </div>
+
             <button 
                 className="refresh-btn flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 border border-white/20 hover:bg-white/20 transition disabled:opacity-50"
                 onClick={fetchRdv}
@@ -249,6 +271,7 @@ const handleFormSubmit = async (data: any) => {
               <th>Date & Heure</th>
               <th>Motif</th>
               <th>Statut</th>
+              <th>Paiement</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -280,9 +303,10 @@ const handleFormSubmit = async (data: any) => {
                   {/* <span className="truncate max-w-[150px] inline-block">{rdv.motif}</span>*/}
                   <td>
                     <span className="whitespace-normal break-words max-w-[250px] inline-block">
-                      {rdv.motif}
+                      {rdv.motif} 
                     </span>
                   </td> 
+                  
                   <td>
                     {/* Application dynamique de la classe CSS du statut */}
                     <span className={`status-badge ${className}`}>
@@ -290,13 +314,19 @@ const handleFormSubmit = async (data: any) => {
                     </span>
                   </td>
                   <td>
+                    <span className="whitespace-normal break-words max-w-[250px] inline-block">
+                      
+                    {rdv.statutPaiement || "PAS PAYE"}
+                    </span>
+                  </td> 
+                  <td>
                     <div className="flex items-center gap-2">
                       <button className="action-btn edit" title="Modifier" onClick={() => handleOpenForm(rdv)}>
                         <Pencil size={15} />
                       </button>
                       
                       {/* Bouton Encaisser (Carte bancaire) - Uniquement si En attente */}
-                      {rdv.statut === 'EN_ATTENTE' && (
+                      {rdv.statut === 'EN_ATTENTE' && rdv.statutPaiement !== 'PAYE' && (
                         <button 
                           className="action-btn view" 
                           style={{ color: '#fbbf24' }}

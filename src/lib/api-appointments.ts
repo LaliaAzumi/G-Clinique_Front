@@ -70,8 +70,8 @@ export const appointmentService = {
   cancel: async (id: number) => {
     const token = localStorage.getItem("token");
     // Endpoint supposé : PATCH /api/v1/rendez-vous/{id}/cancel
-    const response = await fetch(`${API_BASE_URL}/${id}/cancel`, {
-      method: "PATCH", 
+    const response = await fetch(`${API_BASE_URL}/${id}/annuler`, {
+      method: "PUT", 
       headers: { "Authorization": `Bearer ${token}` }
     });
     if (!response.ok) throw new Error("Erreur lors de l'annulation");
@@ -115,6 +115,18 @@ export const appointmentService = {
     if (!res.ok) throw new Error("Erreur chargement RDV paiements");
 
     return res.json();
+  },
+
+  cancelPayment: async (id: number) => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE_URL}/${id}/annuler`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    if (!response.ok) throw new Error("Erreur lors de l'annulation du paiement");
+    return response.json();
   },
 
 };

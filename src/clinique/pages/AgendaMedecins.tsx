@@ -268,6 +268,13 @@ const handleStartRdv = (rdv: any) => {
             {selectedRdv.statut}
           </span>
         </div>
+        <div className="detail-item">
+          <strong>Statut Paiement :</strong> 
+          <span className={`badge ${getStatutBadge(selectedRdv.statutPaiement)}`}>
+            {selectedRdv.statutPaiement}
+          </span>
+        </div>
+
         {selectedRdv.notes && (
           <div className="detail-item">
             <strong>Notes:</strong> {selectedRdv.notes}
@@ -275,15 +282,15 @@ const handleStartRdv = (rdv: any) => {
         )}
       </div>
       <div className="modal-footer">
-        {selectedRdv.statut === "EN_ATTENTE" && (
-    <button 
-      className="btn-primary" 
-      onClick={() => handleStartRdv(selectedRdv)}
-      style={{ backgroundColor: '#1fb468', borderColor: '#1fb468' }} // Couleur verte pour l'action
-    >
-      Commencer la consultation
-    </button>
-  )}
+        {selectedRdv.statut === "EN_ATTENTE" && selectedRdv.statutPaiement === "PAYE" && (
+          <button 
+            className="btn-primary" 
+            onClick={() => handleStartRdv(selectedRdv)}
+            style={{ backgroundColor: '#1fb468', borderColor: '#1fb468' }} // Couleur verte pour l'action
+          >
+            Commencer la consultation
+          </button>
+        )}
         <button className="btn-secondary" onClick={() => setShowModal(false)}>Fermer</button>
       </div>
     </div>

@@ -81,18 +81,8 @@ const handleCancelRdv = async (rdv: any) => {
   if (!rdv || !rdv.id) return;
 
   if (window.confirm("Voulez-vous vraiment annuler ce paiement ?")) {
-    const payload = {
-      id: Number(rdv.id),
-      patientId: rdv.patient?.id, // On envoie juste l'ID
-      medecinId: rdv.medecin?.id, // On envoie juste l'ID
-      date: rdv.date,
-      heure: rdv.heure,
-      motif: rdv.motif,
-      statut: "ANNULE" // La valeur clé
-    };
-    
     try {
-      await appointmentService.save(payload);
+      await appointmentService.cancelPayment(rdv.id);
       await fetchRdv(); // Force le rafraîchissement
     } catch (err) {
       alert("Erreur lors de l'annulation");

@@ -274,13 +274,13 @@ const today = new Date().toISOString().split('T')[0];
         <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] blur-[120px] rounded-full -z-10 ${darkMode ? 'bg-primary/10' : 'bg-primary/5'}`} />
         <div className="max-w-7xl mx-auto text-center">
           <motion.div {...fadeIn}>
-            <span className={`px-4 py-1.5 rounded-full border text-xs font-bold uppercase tracking-widest mb-6 inline-block ${darkMode ? 'border-primary/30 bg-primary/5 text-primary' : 'border-primary/20 bg-primary/10 text-primary'}`}>
+            <span className={`!px-4 py-1.5 rounded-full border text-xs font-bold uppercase tracking-widest mb-6 inline-block ${darkMode ? 'border-primary/30 bg-primary/5 text-primary' : 'border-primary/20 bg-primary/10 text-primary'}`}>
               Disponible 24h/24 à Ankorondrano
             </span>
             <h1 className="text-5xl md:text-8xl font-black mb-8 leading-[0.9] tracking-tight">
               {/* <TypewriterText text="La santé de demain," /><span className="text-primary"><TypewriterText text="aujourd'hui." delay={1.2} /></span> */}
               <TypewriterText text="La santé de demain," iteration={iteration} />
-      <span className="text-primary">
+      <span className="all-unset text-primary">
         <TypewriterText text="aujourd'hui." delay={1.2} iteration={iteration} />
       </span>
             </h1>
