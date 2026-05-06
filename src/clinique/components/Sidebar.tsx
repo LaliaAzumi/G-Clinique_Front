@@ -30,7 +30,7 @@ const navItems = [
   { to: "/app/secretaires", icon: UserCog, label: "Secrétaires", roles: ["ADMIN"] },
   
   { to: "/app/consultations", icon: ClipboardList, label: "Consultations", roles: ["MEDECIN"] },
-  { to: "/app/ordonnances", icon: FileText, label: "Ordonnances", roles: ["MEDECIN"] },
+  { to: "/app/ordonnances", icon: FileText, label: "Ordonnances", roles: ["MEDECIN", "SECRETAIRE"] },
   { to: "/app/paiements", icon: CreditCard, label: "Paiements", roles: ["SECRETAIRE"] },
 ];
 
