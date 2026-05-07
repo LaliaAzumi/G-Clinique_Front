@@ -39,7 +39,8 @@ const SecretariesPage = () => {
 
   return (
     <div className="min-h-screen p-8 text-primary-foreground" 
-         style={{ backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
+         style={{ backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundAttachment: 'fixed' }}
+         >
       
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header Section */}

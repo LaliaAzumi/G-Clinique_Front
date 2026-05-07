@@ -444,11 +444,62 @@ const today = new Date().toISOString().split('T')[0];
                     
                 </div>
                 {/* Adresse Habitat */}
+                 {/* <label className={`text-sm font-semibold px-1 ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                    Date de naissance 
+                </label>
                 <input 
                 
                      value={formData.datenaissance} // Ajouté
                     onChange={(e) => updateForm('datenaissance', e.target.value)} // Ajouté
-                    type="date" className={`w-full p-4 rounded-xl focus:border-primary outline-none border ${darkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'}`} />
+                    type="date" className={`w-full p-4 rounded-xl focus:border-primary outline-none border ${darkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'}`} /> */}
+                    <label
+                    className={`text-sm font-semibold px-1 ${
+                      darkMode ? 'text-slate-400' : 'text-slate-600'
+                    }`}
+                  >
+                    Date de naissance
+                  </label>
+
+                  <input
+                    type="date"
+                    value={formData.datenaissance}
+                    onChange={(e) => {
+                      const value = e.target.value;
+
+                      const today = new Date();
+                      const birthDate = new Date(value);
+
+                      let age = today.getFullYear() - birthDate.getFullYear();
+                      const monthDiff = today.getMonth() - birthDate.getMonth();
+
+                      if (
+                        monthDiff < 0 ||
+                        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+                      ) {
+                        age--;
+                      }
+
+                      // Vérifie si la date est future
+                      if (birthDate > today) {
+                        alert("La date de naissance ne peut pas être dans le futur");
+                        return;
+                      }
+
+                      // Exemple : âge minimum 13 ans
+                      if (age < 13) {
+                        alert("L'utilisateur doit avoir au moins 13 ans");
+                        return;
+                      }
+
+                      updateForm("datenaissance", value);
+                    }}
+                    max={new Date().toISOString().split("T")[0]}
+                    className={`w-full p-4 rounded-xl focus:border-primary outline-none border ${
+                      darkMode
+                        ? "bg-white/5 border-white/10 text-white"
+                        : "bg-slate-50 border-slate-200 text-slate-900"
+                    }`}
+                  />
 
                 <input 
                     type="text" 
@@ -578,7 +629,7 @@ const today = new Date().toISOString().split('T')[0];
                   <input 
                   value={formData.montant}
                   onChange={(e) => updateForm('montant', e.target.value)} // Ajouté
-                  min="25000" type="number" className={`w-full p-4 rounded-xl focus:border-primary outline-none transition-all border ${darkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'}`} placeholder="Montant Envoyer" />
+                  min="25000" type="number" className={`w-full p-4 rounded-xl focus:border-primary outline-none transition-all border ${darkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'}`} placeholder="Montant Envoyer (minimum 25000 Ar)" />
 
                 </motion.div>
               )}

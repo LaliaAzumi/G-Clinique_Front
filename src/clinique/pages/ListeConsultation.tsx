@@ -57,7 +57,7 @@ export default function ListeConsultations() {
           if (part.toLowerCase().includes("obs")) icon = <ClipboardList size={16} className="text-purple-500" />;
 
           return (
-            <div key={index} className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg border border-gray-100">
+            <div key={index} className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg border border-gray-100" style={{background:"#ffffffc5"}}>
               {icon}
               <span className="text-sm font-medium text-gray-700">{part}</span>
             </div>
@@ -155,29 +155,29 @@ export default function ListeConsultations() {
       {/* --- MODAL DE DÉTAILS --- */}
       {selectedConsultation && (
         <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>Détails de la Consultation</h2>
+          <div className="modal-content" style={{background: "#6161616e"}}>
+            <div className="modal-header" style={{background: "#7775756e", color:"#fff"}}>
+              <h2 style={{color:"white"}}>Détails de la Consultation</h2>
               <button onClick={() => setSelectedConsultation(null)} className="close-btn">
                 <X size={20} />
               </button>
             </div>
             
             <div className="modal-body">
-              <div className="info-section">
+              {/* <div className="info-section">
                 <label>Patient</label>
-                <p className="val">{selectedConsultation.rendezVous?.patient?.nom}</p>
-              </div>
+                <p className="val">{selectedConsultation.rendezvous?.patient?.nom}</p>
+              </div> */}
 
               <div className="info-section">
                 <label>Date & Maladie</label>
-                <p className="val">
+                <p className="val" style={{color:"#ffffffb6"}}>
                   Le {new Date(selectedConsultation.date).toLocaleDateString()} — 
-                  <span className="text-blue-600 font-bold ml-2">{selectedConsultation.maladie}</span>
+                  <span className="text-blue-600 font-bold ml-2"style={{color:"#2cdbdbb6"}}>{selectedConsultation.maladie}</span>
                 </p>
               </div>
 
-              <div className="info-section mt-4">
+              <div className="info-section mt-4" >
                 <label className="mb-2 block text-sm font-semibold text-gray-500 uppercase tracking-wider">
                   Paramètres vitaux & Diagnostic
                 </label>
@@ -185,11 +185,16 @@ export default function ListeConsultations() {
               </div>
             </div>
 
-            <div className="modal-footer">
+              
+            <div className="modal-footer" 
+            style={{background:"#ffffff34"}}
+            >
               {/* <button className="btn-print" onClick={() => window.print()}>
                 <FileText size={16} /> Imprimer le compte-rendu
               </button> */}
-              <button className="btn-close-action" onClick={() => setSelectedConsultation(null)}>
+              <button className="btn-close-action" onClick={() => setSelectedConsultation(null)} 
+              style={{background:"#ffffffd5", color:"#646464"}}
+              >
                 Fermer
               </button>
             </div>

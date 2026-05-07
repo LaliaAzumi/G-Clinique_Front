@@ -18,9 +18,9 @@ import "./Sidebar.css";
 
 // --- ÉTAPE 1 : Définition des menus avec les rôles exacts ---
 const navItems = [
-  { to: "/app/dashboard", icon: LayoutDashboard, label: "Dashboard", roles: ["SECRETAIRE", "MEDECIN"] },
+  { to: "/app/dashboard", icon: LayoutDashboard, label: "Dashboard", roles: ["ADMIN"] },
   { to: "/app/agenda", icon: Calendar, label: "Rendez-vous", roles: ["MEDECIN"] },
-  { to: "/app/rendez-vousSec", icon: Calendar, label: "Rendez-vousSec", roles: ["SECRETAIRE"] },
+  { to: "/app/rendez-vousSec", icon: Calendar, label: "Rendez-vousSecretaire", roles: ["SECRETAIRE"] },
   { to: "/app/medoc", icon: Pill, label: "Médicaments", roles: ["SECRETAIRE"] },
   { to: "/app/chambre", icon: Bed, label: "Chambre", roles: ["ADMIN"] },
   { to: "/app/patients", icon: Users, label: "Patients", roles: ["SECRETAIRE", "MEDECIN"] },
@@ -45,6 +45,7 @@ export default function Sidebar() {
       const parsedUser = JSON.parse(savedUser);
       // On stocke le rôle (ex: "ADMIN")
       setUserRole(parsedUser.role); 
+      console.log("Rôle utilisateur:", savedUser); // Debug du rôle
     }
   }, []);
 

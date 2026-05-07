@@ -23,12 +23,12 @@
 // };
 import { Secretary } from "@/types/secretary";
 
-// L'URL de ton backend FastAPI pour les secrétaires
+// L'URL de ton backend localhost pour les secrétaires
 const API_URL = "http://localhost:9090/api/v1/secretaires";
 
 export const secretaryService = {
   /**
-   * Récupère la liste réelle depuis la BDD (via FastAPI)
+   * Récupère la liste réelle depuis la BDD (via localhost)
    */
   getAll: async (): Promise<Secretary[]> => {
     console.log("--- Récupération des secrétaires depuis l'API ---");

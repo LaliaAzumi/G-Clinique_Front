@@ -134,7 +134,10 @@ const handleFormSubmit = async (data: any) => {
     const filtered = appointments.filter((rdv) => {
     const matchesSearch = 
         rdv.patient?.nom?.toLowerCase().includes(search.toLowerCase()) ||
-        rdv.patient?.prenom?.toLowerCase().includes(search.toLowerCase());
+        rdv.patient?.prenom?.toLowerCase().includes(search.toLowerCase()) ||
+        rdv.paiement?.codeTransaction?.toLowerCase().includes(search.toLowerCase()) ||
+        rdv.motif?.toLowerCase().includes(search.toLowerCase()) ||
+        rdv.paiement?.nomExpediteur?.toLowerCase().includes(search.toLowerCase()) ;
 
     // Logique du filtre de statut
     const matchesStatus = 
@@ -168,11 +171,7 @@ const handleFormSubmit = async (data: any) => {
           </h1>
           <p className="text-white/60">Consultez et gérez les paiements des consultations</p>
         </div>
-        
-        {/* <button className="btn-primary flex items-center gap-2" onClick={() => handleOpenForm()}>
-          <Plus size={18} /> 
-          <span>Planifier un paiement</span>
-        </button> */}
+      
       </div>
 
       <div className="table-container">
@@ -181,28 +180,13 @@ const handleFormSubmit = async (data: any) => {
                 <Search size={18} className="text-white/50" />
                 <input 
                 type="text" 
-                placeholder="Rechercher un patient ou un motif..." 
+                placeholder="Rechercher un patient ou un code de transaction ..." 
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="bg-transparent outline-none text-white placeholder:text-white/40 w-full text-sm"
                 />
             </div>
-            {/* <div className="flex items-center gap-2">
-                <label className="text-xs text-white/50 uppercase tracking-wider font-semibold">Statut:</label>
-                <select 
-                className="login-input !w-[160px] cursor-pointer"
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                <option value="Tous">Tous</option>
-                <option value="EN_ATTENTE">En attente</option>
-                <option value="EN_ATTENTE_VALIDATION">En attente validation</option>
-                <option value="ANNULE">Annulé</option>
-                <option value="TERMINE">Terminé</option>
-                <option value="EN_ATTENTE_REPORTER">En attente de report</option>
 
-                </select>
-            </div> */}
             <button 
                 className="refresh-btn flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 border border-white/20 hover:bg-white/20 transition disabled:opacity-50"
                 onClick={fetchRdv}

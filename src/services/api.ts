@@ -10,6 +10,7 @@ export const loginRequest = async (username: string, password: string) => {
   });
 
   const data = await response.json();
+  console.log("Réponse du login:", data); // Debug de la réponse du login  
 
   if (!response.ok) {
     throw new Error(data.detail || "Erreur login");
@@ -24,7 +25,8 @@ export const loginRequest = async (username: string, password: string) => {
   localStorage.setItem("user", JSON.stringify({
     username: safeUsername, // On garde la clé "username" pour matcher avec ta Topbar
     role: data.role || "Utilisateur",
-    initials: safeUsername.substring(0, 2).toUpperCase() // <--- Plus de crash ici !
+    initials: safeUsername.substring(0, 2).toUpperCase() ,// <--- Plus de crash ici !
+    firstLogin: data.firstLogin || false
   }));
 
   return data;

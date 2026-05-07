@@ -124,7 +124,7 @@ export default function ListePatients() {
               <Plus size={16} /> Ajouter un patient
             </button>
           </DialogTrigger>
-          <DialogContent className="glass-card border-white/20 text-white sm:max-w-[600px]">
+          <DialogContent className="glass-card border-white/20 text-white sm:max-w-[600px]" style={{background:"#3131312c"}}>
             <DialogHeader>
               <DialogTitle className="text-xl font-bold">
                 {selectedPatient ? "Modifier le Patient" : "Nouveau Patient"}
@@ -140,7 +140,7 @@ export default function ListePatients() {
 
         {/* MODALE VISUALISATION (OEIL) */}
         <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
-          <DialogContent className="glass-card border-white/20 text-white sm:max-w-[500px]">
+          <DialogContent className="glass-card border-white/20 text-white sm:max-w-[500px]" style={{background:"#3131312c"}}>
             <DialogHeader>
               <DialogTitle className="text-xl font-bold flex items-center gap-2">
                 <User size={20} className="text-blue-400" /> 
@@ -164,7 +164,7 @@ export default function ListePatients() {
                 <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-4">
                   <div>
                     <p className="text-xs text-white/50 uppercase">Sexe</p>
-                    <p>{selectedPatient.sexe || "Non renseigné"}</p>
+                    <p>{selectedPatient.sexe || "NB"}</p>
                   </div>
                   <div>
                     <p className="text-xs text-white/50 uppercase">Âge</p>
@@ -205,6 +205,7 @@ export default function ListePatients() {
           <div className="search-input">
             <Search size={15} className="search-icon" />
             <input
+              style={{color:"white"}}
               type="text"
               placeholder="Rechercher un patient..."
               value={search}
@@ -219,12 +220,12 @@ export default function ListePatients() {
               value={sexeFilter}
               onChange={(e) => { setSexeFilter(e.target.value); setCurrentPage(1); }}
             >
-              <option value="Tous">Tous</option>
-              <option value="M">Homme</option>
-              <option value="F">Femme</option>
+              <option style={{background:"#0b7c64", color:"#ffffff"}} value="Tous">Tous</option>
+              <option style={{background:"#0b7c64", color:"#ffffff"}} value="M">Homme</option>
+              <option style={{background:"#0b7c64", color:"#ffffff"}} value="F">Femme</option>
             </select>
+            </div>
           </div>
-        </div>
 
         {loading ? (
           <div className="p-10 text-center text-white/60">Chargement de la base de données...</div>

@@ -48,6 +48,8 @@ export default function ConsultationPage() {
   const [selectedActeId, setSelectedActeId] = useState<string>("");
   const [newActes, setNewActes] = useState<any[]>([]);
 
+  const [medSearch, setMedSearch] = useState("");
+
   // À ajouter avec les autres states (vitals, rdv, etc.)
 // const [prescriptions, setPrescriptions] = useState<any[]>([]);
 
@@ -205,42 +207,93 @@ export default function ConsultationPage() {
     assignChambre(soinsIntensifs);
   }, [hospitalisationEnabled, soinsIntensifs, chambres]);
 
-  const addPrescription = () => {
-    const med = medicamentsList.find(m => String(m.id) === String(currentMed.id));
-    if (!med) return;
-    if (!currentMed.posologie.trim()) {
-      alert("Veuillez renseigner une posologie avant d'ajouter le médicament.");
-      return;
-    }
-    if (!currentMed.quantite || currentMed.quantite <= 0) {
-      alert("Veuillez indiquer une quantité valide.");
-      return;
-    }
-    if (!currentMed.duree.trim()) {
-      alert("Veuillez renseigner une durée avant d'ajouter le médicament.");
-      return;
-    }
+  // const addPrescription = () => {
+  //   const med = medicamentsList.find(m => String(m.id) === String(currentMed.id));
+  //   if (!med) return;
+  //   if (!currentMed.posologie.trim()) {
+  //     alert("Veuillez renseigner une posologie avant d'ajouter le médicament.");
+  //     return;
+  //   }
+  //   if (!currentMed.quantite || currentMed.quantite <= 0) {
+  //     alert("Veuillez indiquer une quantité valide.");
+  //     return;
+  //   }
+  //   if (!currentMed.duree.trim()) {
+  //     alert("Veuillez renseigner une durée avant d'ajouter le médicament.");
+  //     return;
+  //   }
 
-    const outOfStock = med.qStock === 0;
-    const overRequested = currentMed.quantite > med.qStock;
-    const warning = outOfStock
-      ? "Rupture de stock"
-      : overRequested
-      ? "Quantité demandée supérieure au stock"
-      : "";
+  //   const outOfStock = med.qStock === 0;
+  //   const overRequested = currentMed.quantite > med.qStock;
+  //   const warning = outOfStock
+  //     ? "Rupture de stock"
+  //     : overRequested
+  //     ? "Quantité demandée supérieure au stock"
+  //     : "";
 
-    setSelectedMedicaments(prev => [
-      ...prev,
-      {
-        ...currentMed,
-        nom: `${med.nom}${outOfStock || overRequested ? ' - NA' : ''}`,
-        qStock: med.qStock,
-        warning
-      }
-    ]);
+  //   setSelectedMedicaments(prev => [
+  //     ...prev,
+  //     {
+  //       ...currentMed,
+  //       nom: `${med.nom}${outOfStock || overRequested ? ' - NA' : ''}`,
+  //       qStock: med.qStock,
+  //       warning
+  //     }
+  //   ]);
 
-    setCurrentMed({ id: "", posologie: "", quantite: 0, duree: "" });
-  };
+  //   setCurrentMed({ id: "", posologie: "", quantite: 0, duree: "" });
+  // };
+
+const addPrescription = () => {
+  const med = medicamentsList.find(m => String(m.id) === String(currentMed.id));
+  if (!med) return;
+
+  // 🚫 bloquer doublon
+  const alreadyAdded = selectedMedicaments.some(
+    (m) => String(m.id) === String(currentMed.id)
+  );
+
+  if (alreadyAdded) {
+    alert("Ce médicament a déjà été ajouté.");
+    return;
+  }
+
+  if (!currentMed.posologie.trim()) {
+    alert("Veuillez renseigner une posologie avant d'ajouter le médicament.");
+    return;
+  }
+
+  if (!currentMed.quantite || currentMed.quantite <= 0) {
+    alert("Veuillez indiquer une quantité valide.");
+    return;
+  }
+
+  if (!currentMed.duree.trim()) {
+    alert("Veuillez renseigner une durée avant d'ajouter le médicament.");
+    return;
+  }
+
+  const outOfStock = med.qStock === 0;
+  const overRequested = currentMed.quantite > med.qStock;
+
+  const warning = outOfStock
+    ? "Rupture de stock"
+    : overRequested
+    ? "Quantité demandée supérieure au stock"
+    : "";
+
+  setSelectedMedicaments(prev => [
+    ...prev,
+    {
+      ...currentMed,
+      nom: `${med.nom}${outOfStock || overRequested ? " - NA" : ""}`,
+      qStock: med.qStock,
+      warning
+    }
+  ]);
+
+  setCurrentMed({ id: "", posologie: "", quantite: 0, duree: "" });
+};
 
   const addActe = () => {
     const acte = actes.find(a => String(a.id) === selectedActeId);
@@ -365,7 +418,7 @@ const handleSubmit = async () => {
         // Optionnel : rediriger vers la liste des rendez-vous
     } catch (err: any) {
         console.error(err);
-        alert("Erreur : " + err.message);
+        // alert("Erreur : " + err.message);
     } finally {
         setIsSaving(false);
     }
@@ -381,6 +434,9 @@ const handleSubmit = async () => {
       ? `Quantité demandée (${currentMed.quantite}) supérieure au stock disponible (${selectedMedItem.qStock}).`
       : ""
     : "";
+const filteredMedicaments = medicamentsList.filter(m =>
+  m.nom.toLowerCase().includes(medSearch.toLowerCase())
+);
 
   return (
     <>
@@ -409,7 +465,7 @@ const handleSubmit = async () => {
           )}
         </div>
 
-        {rdv?.prestations?.length > 0 && (
+        {/* {rdv?.prestations?.length > 0 && (
           <div className="mb-8 rounded-3xl bg-slate-800/80 p-6 border border-white/10">
             <h3 className="text-xl font-bold mb-4">Actes prévus</h3>
             <div className="space-y-4">
@@ -436,7 +492,7 @@ const handleSubmit = async () => {
               ))}
             </div>
           </div>
-        )} 
+        )}  */}
 
         <div className="flex justify-between mb-10 relative">
           <div className="absolute top-5 left-0 w-full h-[2px] bg-white/10" />
@@ -453,12 +509,12 @@ const handleSubmit = async () => {
             <motion.div key="step1" initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }}>
               <h3 className="text-xl font-bold mb-6 flex items-center gap-2"><FaHeartbeat /> Examen</h3>
               <div className="grid grid-cols-2 gap-4">
-                <input name="temperature" placeholder="Température" onChange={handleInputChange} className="input" value={vitals.temperature} />
-                <input name="tension" placeholder="Tension" onChange={handleInputChange} className="input" value={vitals.tension} />
-                <input name="pouls" placeholder="Pouls" onChange={handleInputChange} className="input" value={vitals.pouls} />
-                <input name="saturation" placeholder="Saturation" onChange={handleInputChange} className="input" value={vitals.saturation} />
+                <input name="temperature" placeholder="Température 35°C" onChange={handleInputChange} className="input" value={vitals.temperature} />
+                <input name="tension" placeholder="Tension 120/80" onChange={handleInputChange} className="input" value={vitals.tension} />
+                <input name="pouls" placeholder="Pouls 70 bpm" onChange={handleInputChange} className="input" value={vitals.pouls} />
+                <input name="saturation" placeholder="Saturation 98%" onChange={handleInputChange} className="input" value={vitals.saturation} />
               </div>
-              <input name="poids" placeholder="Poids" onChange={handleInputChange} className="input mt-3" value={vitals.poids} />
+              <input name="poids" placeholder="Poids 70 kg" onChange={handleInputChange} className="input mt-3" value={vitals.poids} />
               <input name="maladie" placeholder="Diagnostic" onChange={handleInputChange} className="input mt-3" value={vitals.maladie} />
               <textarea name="observations" placeholder="Observations" onChange={handleInputChange} className="input mt-3" value={vitals.observations} />
             </motion.div>
@@ -477,13 +533,17 @@ const handleSubmit = async () => {
                       onChange={(e) => setSelectedActeId(e.target.value)}
                     >
                       <option value="">Choisir un acte</option>
-                      {actes.map((acte) => (
-                        <option key={acte.id} value={acte.id}>
+                      {actes
+                       .filter(acte => acte.id !== 1)
+                       .map((acte) => (
+                        <option style={{background:"#0b7c64", color:"#fff"}} key={acte.id} value={acte.id}>
                           {acte.libelle || acte.nom} - {acte.prix} Ar
                         </option>
                       ))}
                     </select>
-                    <button onClick={addActe} className="w-full md:w-auto bg-violet-600 p-3 rounded-xl font-bold">
+                    <button onClick={addActe} className="w-full md:w-auto bg-violet-600 p-3 rounded-xl font-bold" 
+                    style={{background:"#0b7c64"}}
+                    >
                       Ajouter l'acte
                     </button>
                   </div>
@@ -517,18 +577,50 @@ const handleSubmit = async () => {
                 ) : medicamentsError ? (
                   <p className="text-red-400 mb-3">{medicamentsError}</p>
                 ) : (
-                  <select
-                    className="w-full p-4 rounded-xl bg-white/5 border border-white/10 mb-3"
-                    value={currentMed.id}
-                    onChange={(e) => setCurrentMed({ ...currentMed, id: e.target.value })}
-                  >
-                    <option value="">Choisir médicament</option>
-                    {medicamentsList.map((m) => (
-                      <option key={m.id} value={m.id}>
-                        {m.nom} · {m.qStock === 0 ? 'Rupture de stock' : `${m.qStock} en stock`}
-                      </option>
-                    ))}
-                  </select>
+                  // <select
+                  //   className="w-full p-4 rounded-xl bg-white/5 border border-white/10 mb-3"
+                  //   value={currentMed.id}
+                  //   onChange={(e) => setCurrentMed({ ...currentMed, id: e.target.value })}
+                  // >
+                  //   <option value="">Choisir médicament</option>
+                  //   {medicamentsList.map((m) => (
+                  //     <option style={{background:"#0b7c64", color:"#fff"}} key={m.id} value={m.id}>
+                  //       {m.nom} · {m.qStock === 0 ? 'Rupture de stock' : `${m.qStock} en stock`}
+                  //     </option>
+                  //   ))}
+                  // </select>
+                  <div className="mb-3">
+  <input
+    type="text"
+    placeholder="Rechercher un médicament..."
+    value={medSearch}
+    onChange={(e) => setMedSearch(e.target.value)}
+    className="w-full p-3 rounded-xl bg-white/5 border border-white/10 text-white mb-2"
+  />
+
+  <div className="max-h-48 overflow-y-auto rounded-xl border border-white/10 bg-white/5">
+    {filteredMedicaments.length === 0 ? (
+      <p className="p-3 text-slate-400">Aucun médicament trouvé</p>
+    ) : (
+      filteredMedicaments.map((m) => (
+        <div
+          key={m.id}
+          onClick={() => setCurrentMed({ ...currentMed, id: String(m.id) })}
+          className={`p-3 cursor-pointer hover:bg-white/10 transition ${
+            String(currentMed.id) === String(m.id) ? "bg-white/10" : ""
+          }`}
+        >
+          <div className="flex justify-between">
+            <span>{m.nom}</span>
+            <span className="text-xs text-slate-400">
+              {m.qStock === 0 ? "Rupture" : `${m.qStock} stock`}
+            </span>
+          </div>
+        </div>
+      ))
+    )}
+  </div>
+</div>
                 )}
                 <input
                   className="w-full p-4 rounded-xl bg-white/5 border border-white/10 mb-3"

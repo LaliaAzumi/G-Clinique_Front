@@ -29,12 +29,12 @@
 // };
 import { Medecin } from "@/types/medecins";
 
-// L'URL de ton backend FastAPI pour les médecins
+// L'URL de ton backend localhost pour les médecins
 const API_URL = "http://localhost:9090/api/v1/medecins";
 
 export const medecinService = {
   /**
-   * Récupère la liste réelle depuis la BDD (via FastAPI)
+   * Récupère la liste réelle depuis la BDD (via localhost)
    */
   getAll: async (): Promise<Medecin[]> => {
     console.log("--- Récupération des médecins depuis l'API ---");

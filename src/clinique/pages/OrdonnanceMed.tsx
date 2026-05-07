@@ -341,7 +341,7 @@ const OrdonnanceMed = () => {
         <button
           onClick={handleSearch}
           className="bg-blue-600 text-white px-6 py-2 rounded-lg"
-              style={{ backgroundColor: '#1fb468', borderColor: '#1fb468', padding:"15px 15px" }} 
+              style={{ backgroundColor: '#19af96', borderColor: '#19af96', padding:"15px 15px" }} 
         >
           Rechercher
         </button>
@@ -376,9 +376,9 @@ const OrdonnanceMed = () => {
           value={filterPaid}
           onChange={(e) => setFilterPaid(e.target.value as any)}
         >
-          <option  style={{background:"#f8f8f81e", color:"#424242"}} value="ALL">Tous</option>
-          <option style={{background:"#f8f8f81e", color:"#424242"}} value="PAID">Payés</option>
-          <option  style={{background:"#f8f8f81e", color:"#424242"}} value="UNPAID">Non payés</option>
+          <option  style={{background:"#0b7c64", color:"#fff"}} value="ALL">Tous</option>
+          <option style={{background:"#0b7c64", color:"#fff"}} value="PAID">Payés</option>
+          <option  style={{background:"#0b7c64", color:"#fff"}} value="UNPAID">Non payés</option>
         </select>
 
         {/* RESET */}

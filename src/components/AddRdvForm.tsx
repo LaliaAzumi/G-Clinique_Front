@@ -37,13 +37,13 @@ const AddRdvForm = ({ rdvToEdit, onSuccess, onCancel }: AddRdvFormProps) => {
     const headers = { "Authorization": `Bearer ${token}` };
     try {
       // 1. Charger Patients (Vérifiez si l'API patient renvoie aussi un ApiResponse ou un tableau direct)
-      const resP = await fetch("http://localhost:8000/api/v1/patients", { headers });
+      const resP = await fetch("http://fastapi:8000/api/v1/patients", { headers });
       const jsonP = await resP.json();
       // Si votre API Patient suit la même structure ApiResponse :
       setPatients(jsonP.data?.patients || jsonP || []);
 
       // 2. Charger Médecins (Adapté à votre MedecinApiController.java)
-      const resM = await fetch("http://localhost:8000/api/v1/medecins", { headers });
+      const resM = await fetch("http://fastapi:8000/api/v1/medecins", { headers });
       const jsonM = await resM.json();
       
       console.log("Réponse API Médecins:", jsonM);

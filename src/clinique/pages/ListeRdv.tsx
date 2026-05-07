@@ -221,12 +221,12 @@ const handleFormSubmit = async (data: any) => {
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 >
-                <option value="Tous">Tous</option>
-                <option value="EN_ATTENTE">En attente</option>
-                {/* <option value="EN_ATTENTE_VALIDATION">En attente validation</option> */}
-                <option value="ANNULE">Annulé</option>
-                <option value="TERMINE">Terminé</option>
-                <option value="EN_ATTENTE_REPORTER">En attente de report</option>
+                <option style={{background:"#0b7c64", color:"#fff"}} value="Tous">Tous</option>
+                <option style={{background:"#0b7c64", color:"#fff"}} value="EN_ATTENTE">En attente</option>
+                {/* <option style={{background:"#0b7c64", color:"#fff"}} value="EN_ATTENTE_VALIDATION">En attente validation</option> */}
+                <option style={{background:"#0b7c64", color:"#fff"}} value="ANNULE">Annulé</option>
+                <option style={{background:"#0b7c64", color:"#fff"}} value="TERMINE">Terminé</option>
+                <option style={{background:"#0b7c64", color:"#fff"}} value="EN_ATTENTE_REPORTER">En attente de report</option>
 
                 </select>
             </div>
@@ -237,11 +237,11 @@ const handleFormSubmit = async (data: any) => {
                 value={statusFilterPaiement}
                 onChange={(e) => setStatusFilterPaiement(e.target.value)}
                 >
-                <option value="Tous">Tous</option>
-                <option value="PAYE">PAYE</option>
-                {/* <option value="EN_ATTENTE_VALIDATION">En attente validation</option> */}
-                <option value="EN_ATTENTE_PAIEMENT">EN_ATTENTE_PAIEMENT</option>
-                <option value="REFUSE">REFUSE</option>
+                <option style={{background:"#0b7c64", color:"#fff"}} value="Tous">Tous</option>
+                <option style={{background:"#0b7c64", color:"#fff"}} value="PAYE">PAYE</option>
+                {/* <option style={{background:"#0b7c64", color:"#fff"}} value="EN_ATTENTE_VALIDATION">En attente validation</option> */}
+                <option style={{background:"#0b7c64", color:"#fff"}} value="EN_ATTENTE_PAIEMENT">EN_ATTENTE_PAIEMENT</option>
+                <option style={{background:"#0b7c64", color:"#fff"}} value="REFUSE">REFUSE</option>
                 </select>
             </div>
 

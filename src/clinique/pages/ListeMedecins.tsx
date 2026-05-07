@@ -372,9 +372,11 @@ const SPECIALITES_LISTE = [
                 setCurrentPage(1);
               }}
             >
-              <option value="Toutes">Toutes</option>
+              <option  style={{background:"#00a884", color:"#ffffff"}} value="Toutes">Toutes</option>
               {specialitesUniques.map((s) => (
-                <option key={s} value={s}>{s}</option>
+                <option key={s} value={s}
+                style={{background:"#00a884", color:"#ffffff"}}
+                >{s}</option>
               ))}
             </select>
           </div>
@@ -383,7 +385,7 @@ const SPECIALITES_LISTE = [
         <table className="data-table">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Numéro</th>
               <th>Nom</th>
               <th>Spécialité</th>
               <th>Téléphone</th>

@@ -93,7 +93,7 @@ export const rendezVousService = {
       const result = await response.json();
 
       if (!response.ok) {
-        // On récupère le message d'erreur envoyé par FastAPI/Spring Boot
+        // On récupère le message d'erreur envoyé par FastAPI/localhost Boot
         throw new Error(result.detail || "Erreur lors de l'enregistrement");
       }
 
