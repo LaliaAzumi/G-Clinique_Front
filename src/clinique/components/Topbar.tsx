@@ -197,6 +197,10 @@ export default function Topbar() {
   const [open, setOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
 
+  const [showChangePwd, setShowChangePwd] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
   // 📩 Notifications
   const [notifications, setNotifications] = useState<string[]>([]);
 
@@ -273,6 +277,36 @@ export default function Topbar() {
 
     return name.substring(0, Math.min(2, name.length)).toUpperCase();
   };
+  const handleChangePassword = async () => {
+    try {
+      // const res = await fetch("http://localhost:8000/api/change-password/", {
+      console.log("TOKEN =", localStorage.getItem("token"));
+      const res = await fetch(
+      "http://localhost:8000/api/v1/secretaires/change-password",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        }),
+      }
+    );
+
+    if (!res.ok) throw new Error("Erreur changement mot de passe");
+
+    toast.success("Mot de passe changé !");
+    setShowChangePwd(false);
+    setOldPassword("");
+    setNewPassword("");
+  } catch (err) {
+    toast.error("Échec du changement de mot de passe");
+  }
+};
 
   return (
     <>
@@ -369,7 +403,17 @@ export default function Topbar() {
           }}
         >
           <div>{user ? user.email : ""}</div>
-          <div>changer mdp</div>
+          {/* <div>changer mdp</div>
+           */}
+           <div
+              style={{ cursor: "pointer", padding: "8px 0" }}
+              onClick={() => {
+                setShowChangePwd(true);
+                setOpen(false);
+              }}
+            >
+              Changer mot de passe
+            </div>
         </div>
       )}
 
@@ -428,6 +472,42 @@ export default function Topbar() {
           )}
         </div>
       )}
+      {showChangePwd && (
+  <div className="modal-overlayhuhu">
+    <div className="modal-boxhuhu">
+      <h3>Changer mot de passe</h3>
+
+      <input
+            style={{background: "rgba(255, 255, 255, 0.212)", border: "1px solid #ccc", padding: "8px", borderRadius: "4px", width: "100%"}}
+
+        type="password"
+        placeholder="Ancien mot de passe"
+        value={oldPassword}
+        onChange={(e) => setOldPassword(e.target.value)}
+      />
+
+      <input
+            style={{background: "rgba(255, 255, 255, 0.212)", border: "1px solid #ccc", padding: "8px", borderRadius: "4px", width: "100%"}}
+
+        type="password"
+        placeholder="Nouveau mot de passe"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+      />
+      <br/>
+
+      <div style={{ display: "flex", gap: "60px" }}>
+        <button onClick={() => setShowChangePwd(false)}>
+          Annuler
+        </button>
+
+        <button onClick={handleChangePassword} className="add-btn">
+          Valider
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 }
