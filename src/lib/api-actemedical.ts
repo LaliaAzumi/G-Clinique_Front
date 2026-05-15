@@ -1,5 +1,5 @@
 // L'URL pointe vers ton API FastAPI
-const API_URL = "http://localhost:8000/api/v1/actes";
+const API_URL = "http://localhost:9090/api/v1/actes";
 
 export const acteService = {
   /**
@@ -33,7 +33,7 @@ export const acteService = {
 
 //liste medecins avy @ base
 // L'URL pointe vers ton API FastAPI pour les médecins (Port 8080)
-const MED_API_URL = "http://localhost:8080/api/v1/medecins";
+const MED_API_URL = "http://localhost:9090/api/v1/medecins";
 
 export const medecinService = {
   /**
@@ -70,9 +70,9 @@ export const medecinService = {
   },
 };
 
-//visible par les gens 
+//visible par les gens /api/v1/rendez-vous/save-public
 // --- AJOUT : SERVICE RENDEZ-VOUS ---
-const RDV_API_URL = "http://localhost:8080/api/v1/rendez-vous";
+const RDV_API_URL = "http://localhost:8000/api/v1/rendez-vous";
 
 export const rendezVousService = {
   /**
@@ -93,7 +93,7 @@ export const rendezVousService = {
       const result = await response.json();
 
       if (!response.ok) {
-        // On récupère le message d'erreur envoyé par FastAPI/Spring Boot
+        // On récupère le message d'erreur envoyé par FastAPI/localhost Boot
         throw new Error(result.detail || "Erreur lors de l'enregistrement");
       }
 

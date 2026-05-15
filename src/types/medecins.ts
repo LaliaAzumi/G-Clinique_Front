@@ -1,8 +1,11 @@
 export interface Medecin {
   id: string;
-  Nom: string;
-  Specialite: string;
-  Telephone: string;
-  Adress: string;
+  nom: string;
+  specialite: string;
+  telephone: string;
+  adresse: string;
+  email: string;
+  username: string;
+  medecinId:string
   
 }

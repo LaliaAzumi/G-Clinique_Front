@@ -115,3 +115,23 @@
   color: var(--text-muted);
   font-size: 12px;
 }
+
+.modal-overlayhuhu {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.76);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-boxhuhu {
+  background: rgba(0, 0, 0, 0.596);
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

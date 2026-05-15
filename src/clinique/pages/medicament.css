@@ -1,0 +1,194 @@
+/*  */
+.med-container {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* HEADER */
+.med-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-btn {
+  background: #0d7377;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.med-header h2 {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* SEARCH */
+.search-box {
+  position: relative;
+  width: 300px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+/* SUGGESTIONS */
+.suggestions {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background: #eee;
+}
+
+/* FILTERS */
+.filters {
+  display: flex;
+  gap: 10px;
+}
+
+.filters button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* GRID */
+.med-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.med-card {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: 0.2s;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.med-card:hover {
+  transform: translateY(-5px);
+}
+
+.med-img {
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #00000034;
+}
+
+.med-img img {
+  width: 70px;
+}
+
+/* INFO */
+.med-info {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.med-title {
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.med-desc {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.med-bottom {
+  margin-top: auto;
+}
+
+.med-meta {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.danger {
+  color: red;
+  font-weight: bold;
+}
+
+/* ACTIONS */
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.212);
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+/* 
+span {
+  font-size: 12px;
+  color: #d6d6d6;
+} */
+.med-container span {
+  font-size: 12px;
+  color: #d6d6d6;
+}

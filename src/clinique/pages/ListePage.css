@@ -303,3 +303,103 @@
 .clinique-scope .text-muted {
   color: var(--text-muted);
 }
+.status-legend {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid #f1f1f1;
+  flex-wrap: wrap;
+  /* background: #fafafa; */
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #e6e6e6;
+  font-weight: 500;
+}
+
+.legend-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.legend-color.success {
+  background: #1fb468;
+}
+
+.legend-color.warning {
+  background: #fcc419;
+}
+
+.legend-color.danger {
+  background: #f03e3e;
+}
+
+.legend-color.info {
+  background: #228be6;
+}
+
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.table-container {
+  flex: 1; /* 🔥 prend tout l’espace restant */
+  display: flex;
+  flex-direction: column;
+}
+.custom-table {
+  width: 100%;
+  flex: 1; /* 🔥 pousse vers le bas */
+}
+.table-container th, td {
+    text-align: left;
+    padding: 10px 16px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    white-space: nowrap;
+}
+.legend-color.warning-reporter {
+  background-color: #f472b571;
+}
+.bg-reporter-light {
+  background-color: #f472b571; /* rose */
+  color: #ffffff;
+}
+.rv-card {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  border-left: 4px solid currentColor;
+
+  /* 🔥 important */
+  overflow: hidden;
+  word-break: break-word;
+}
+.patient-name {
+  display: block;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.2;
+}
+.rv-motif {
+  white-space: normal;
+  word-break: break-word;
+
+  /* optionnel pour limiter hauteur */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* max 2 lignes */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

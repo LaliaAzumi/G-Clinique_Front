@@ -6,4 +6,5 @@ export interface Patient {
   telephone: string;
   email: string;
   adresse?: string;
+  sexe?: string; // "M", "F", ou null
 }

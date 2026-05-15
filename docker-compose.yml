@@ -1,0 +1,80 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: gclinique-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: cliniquenew
+    volumes:
+      - gclinique_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  spring:
+    build:
+      context: ../G-Clinique_Back
+      dockerfile: Dockerfile.spring
+    container_name: gclinique-spring
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cliniquenew?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME:-nekenarakotomalala760@gmail.com}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD:-votre_mot_de_passe_app}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
+      SERVER_PORT: 9090
+    ports:
+      - "9090:9090"
+
+  fastapi:
+    build:
+      context: ../G-Clinique_Back/python-api
+      dockerfile: Dockerfile
+    container_name: gclinique-fastapi
+    restart: unless-stopped
+    depends_on:
+      - spring
+    environment:
+      SPRING_BOOT_URL: http://spring:9090
+      SECRET_KEY: your-secret-key-change-this
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+    ports:
+      - "8000:8000"
+
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: gclinique-frontend
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - fastapi
+  #     - spring
+  #   ports:
+  #     - "8080:8080"
+  frontend:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    ports:
+      - "8080:8080"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 8080"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+volumes:
+  gclinique_mysql_data:

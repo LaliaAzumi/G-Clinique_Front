@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   Calendar,
   ClipboardList,
@@ -10,21 +11,57 @@ import {
   Stethoscope,
   UserCog,
   Users,
+  Bed,
+  Pill
 } from "lucide-react";
 import "./Sidebar.css";
 
+// --- ÉTAPE 1 : Définition des menus avec les rôles exacts ---
 const navItems = [
-  { to: "/app/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/app/rendez-vous", icon: Calendar, label: "Rendez-vous" },
-  { to: "/app/patients", icon: Users, label: "Patients" },
-  { to: "/app/medecins", icon: Stethoscope, label: "Médecins" },
-  { to: "/app/secretaires", icon: UserCog, label: "Secrétaires" },
-  { to: "/app/consultations", icon: ClipboardList, label: "Consultations" },
-  { to: "/app/ordonnances", icon: FileText, label: "Ordonnances" },
-  { to: "/app/paiements", icon: CreditCard, label: "Paiements" },
-] as const;
+  { to: "/app/dashboard", icon: LayoutDashboard, label: "Dashboard", roles: ["ADMIN"] },
+  { to: "/app/agenda", icon: Calendar, label: "Rendez-vous", roles: ["MEDECIN"] },
+  { to: "/app/rendez-vousSec", icon: Calendar, label: "Rendez-vousSecretaire", roles: ["SECRETAIRE"] },
+  { to: "/app/medoc", icon: Pill, label: "Médicaments", roles: ["SECRETAIRE"] },
+  { to: "/app/chambre", icon: Bed, label: "Chambre", roles: ["ADMIN"] },
+  { to: "/app/patients", icon: Users, label: "Patients", roles: ["SECRETAIRE", "MEDECIN"] },
+  
+  // Seul l'ADMIN peut voir ces deux-là
+  { to: "/app/medecins", icon: Stethoscope, label: "Médecins", roles: ["ADMIN"] },
+  { to: "/app/secretaires", icon: UserCog, label: "Secrétaires", roles: ["ADMIN"] },
+  
+  { to: "/app/consultations", icon: ClipboardList, label: "Consultations", roles: ["MEDECIN"] },
+  { to: "/app/ordonnances", icon: FileText, label: "Ordonnances", roles: ["MEDECIN", "SECRETAIRE"] },
+  { to: "/app/paiements", icon: CreditCard, label: "Paiements", roles: ["SECRETAIRE"] },
+];
 
 export default function Sidebar() {
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  // --- ÉTAPE 2 : Récupérer le rôle au chargement ---
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      const parsedUser = JSON.parse(savedUser);
+      // On stocke le rôle (ex: "ADMIN")
+      setUserRole(parsedUser.role); 
+      console.log("Rôle utilisateur:", savedUser); // Debug du rôle
+    }
+  }, []);
+
+ const filteredNavItems = useMemo(() => {
+    if (!userRole) return [];
+    
+    return navItems.filter((item) => 
+      item.roles.includes(userRole.toUpperCase())
+    );
+  }, [userRole]); // <--- Très important : on écoute les changements de userRole
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
+
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
@@ -33,7 +70,7 @@ export default function Sidebar() {
       </div>
 
       <nav className="sidebar-nav">
-        {navItems.map(({ to, icon: Icon, label }) => (
+        {filteredNavItems.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
@@ -46,10 +83,10 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar-bottom">
-        <NavLink to="/" className="nav-item nav-logout">
+        <button onClick={handleLogout} className="nav-item nav-logout" style={{ width: '100%', border: 'none', background: 'none', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 20px' }}>
           <LogOut size={18} />
           <span>Déconnexion</span>
-        </NavLink>
+        </button>
       </div>
     </aside>
   );

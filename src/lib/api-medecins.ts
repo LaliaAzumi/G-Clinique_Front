@@ -29,12 +29,12 @@
 // };
 import { Medecin } from "@/types/medecins";
 
-// L'URL de ton backend FastAPI pour les médecins
-const API_URL = "http://localhost:8080/api/v1/medecins";
+// L'URL de ton backend localhost pour les médecins
+const API_URL = "http://localhost:9090/api/v1/medecins";
 
 export const medecinService = {
   /**
-   * Récupère la liste réelle depuis la BDD (via FastAPI)
+   * Récupère la liste réelle depuis la BDD (via localhost)
    */
   getAll: async (): Promise<Medecin[]> => {
     console.log("--- Récupération des médecins depuis l'API ---");
@@ -62,26 +62,57 @@ export const medecinService = {
   /**
    * Création d'un médecin dans la BDD
    */
-  create: async (data: Omit<Medecin, "id">): Promise<Medecin> => {
-    const response = await fetch(`${API_URL}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) throw new Error("Erreur lors de la création");
-    const result = await response.json();
-    return result.data;
-  },
-
+  // Dans votre fichier lib/api-medecins.ts
+createWithUser: async (data: any) => {
+  const response = await fetch(`${API_URL}/create-with-user`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`, // Ajustez selon votre gestion de token
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error("Erreur lors de la création");
+  return response.json();
+},
   /**
    * Suppression d'un médecin dans la BDD
    */
   delete: async (id: string): Promise<void> => {
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: "DELETE",
-    });
+  const token = localStorage.getItem("token"); // Récupère ton token
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${token}` // <--- Crucial
+    },
+  });
 
-    if (!response.ok) throw new Error("Erreur lors de la suppression");
+  if (!response.ok) throw new Error("Erreur lors de la suppression");
+},
+
+  update: async (id: number | string, data: Medecin): Promise<any> => {
+    const token = localStorage.getItem("token"); // Récupère ton token JWT si nécessaire
+
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // Ajout du header Auth
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Erreur lors de la modification");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Erreur dans medecinService.update :", error);
+      throw error;
+    }
+
   }
 };
