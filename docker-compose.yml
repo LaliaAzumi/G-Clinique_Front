@@ -30,7 +30,7 @@ services:
       SPRING_MAIL_HOST: smtp.gmail.com
       SPRING_MAIL_PORT: 587
       SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME:-nekenarakotomalala760@gmail.com}
-      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD:-votre_mot_de_passe_app}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD:-srghtiftjtbnsvaa}
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
       SERVER_PORT: 9090

@@ -37,13 +37,13 @@ const AddRdvForm = ({ rdvToEdit, onSuccess, onCancel }: AddRdvFormProps) => {
     const headers = { "Authorization": `Bearer ${token}` };
     try {
       // 1. Charger Patients (Vérifiez si l'API patient renvoie aussi un ApiResponse ou un tableau direct)
-      const resP = await fetch("http://fastapi:8000/api/v1/patients", { headers });
+      const resP = await fetch("http://localhost:8000/api/v1/patients", { headers });
       const jsonP = await resP.json();
       // Si votre API Patient suit la même structure ApiResponse :
       setPatients(jsonP.data?.patients || jsonP || []);
 
       // 2. Charger Médecins (Adapté à votre MedecinApiController.java)
-      const resM = await fetch("http://fastapi:8000/api/v1/medecins", { headers });
+      const resM = await fetch("http://localhost:8000/api/v1/medecins", { headers });
       const jsonM = await resM.json();
       
       console.log("Réponse API Médecins:", jsonM);
@@ -51,6 +51,7 @@ const AddRdvForm = ({ rdvToEdit, onSuccess, onCancel }: AddRdvFormProps) => {
       // extraction du tableau depuis l'objet ApiResponse { success, message, data: { medecins: [] } }
       if (jsonM.success && jsonM.data && Array.isArray(jsonM.data.medecins)) {
         setMedecins(jsonM.data.medecins);
+        console.log("les mdeoc", medecins);
       } else {
         console.error("Format de données médecin inconnu", jsonM);
         setMedecins([]);
@@ -156,7 +157,7 @@ const handleInternalSubmit = (data: any) => {
               {selectedMedecinName || "Choisir un médecin..."}
             </span>
           </div>
-          {openMedecin && !rdvToEdit &&  (
+          {openMedecin && !rdvToEdit && (
             <div className="absolute z-40 w-full mt-1 bg-[#0f172a] border border-white/10 rounded-lg shadow-2xl max-h-40 overflow-y-auto">
               <input type="text" className="w-full p-2 bg-transparent border-b border-white/10 text-white text-sm sticky top-0 bg-[#0f172a]" placeholder="Filtrer..." value={searchMedecin} onChange={(e) => setSearchMedecin(e.target.value)} autoFocus />
               {filteredMedecins.length > 0 ? (
